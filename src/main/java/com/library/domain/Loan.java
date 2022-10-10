@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 public class Loan {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @NotNull(message="Please provide load date")
     @Column(nullable = false)
@@ -37,7 +37,7 @@ public class Loan {
     @Column(length = 300)
     private String notes;
 
-    //@jsonignore annotation koymak doğru olur mu ? sorulacak.
+    //TODO @jsonignore annotation koymak doğru olur mu ? sorulacak.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)

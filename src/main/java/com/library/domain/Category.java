@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotNull(message="Please provide category name")
@@ -27,8 +27,7 @@ public class Category {
     @Column(nullable = false)
     private Boolean builtIn = false;
 
-    //Not null, default: one more than the largest number in sequence fields
-    // detaylar sorulacak
+    //TODO Not null, default: one more than the largest number in sequence fields detaylar sorulacak
     @NotNull(message="Please provide sequence")
     @Column(nullable = false)
     private Integer sequence;

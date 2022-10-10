@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotNull(message="Please provide book name")
@@ -30,12 +30,11 @@ public class Book {
     @Column(length = 80,nullable = false)
     private String name;
 
-    //regex format eklenecek format : 999-99-99999-99-9
     @NotNull(message="Please provide isbn name")
     @Size(min=17, max=17,message="Isbn '${validatedValue}' must be between {min} and {max} chars long")
+    @Pattern(regexp = "^\\d{3}-\\d{2}-\\d{5}-\\d{2}-\\d$",message = "Please provide valid isbn")
     @Column(length = 17,nullable = false)
     private String isbn;
-
 
     private Integer pageCount;
 
@@ -43,18 +42,16 @@ public class Book {
     @Column(nullable = false)
     private Integer publishDate;
 
-
     private File image;
 
     @NotNull(message="Please provide loanable")
     @Column(nullable = false)
     private Boolean loanable = true;
 
-    //regex format eklenecek format : AA-999 [A-Z]{2}\-\d{3}
     @NotNull(message="Please provide shelf code ")
     @Size(min=6, max=6,message="ShelfCode '${validatedValue}' must be {max} chars long")
     @Column(length = 6,nullable = false)
-    //@Pattern(regexp = "^((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$",message = "Please provide valid phone number")
+    @Pattern(regexp = "^[A-Z]{2}-\\d{3}$",message = "Please provide valid shelf code")
     private String shelfCode;
 
     @NotNull(message="Please provide active")

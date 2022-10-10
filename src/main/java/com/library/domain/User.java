@@ -23,7 +23,7 @@ import java.util.Set;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotNull(message="Please provide first name")
@@ -36,7 +36,7 @@ public class User {
     @Column(length = 30,nullable = false)
     private String lastName;
 
-    //score ile ilgili detaylar sorulacak
+    // TODO score ile ilgili detaylar sorulacak
     @NotNull(message="Please provide score")
     @Size(min=-2, max=2,message="Score '${validatedValue}' must be between {min} and {max} chars long")
     @Column(nullable = false)
@@ -47,11 +47,10 @@ public class User {
     @Column(length = 100,nullable = false)
     private String address;
 
-    //format: 999-999-9999
+
     @NotNull(message="Please provide phone number")
     @Size(min=12, max=12,message="Phone number '${validatedValue}' must be {max} chars long")
-    @Pattern(regexp = "^((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$",
-            message = "Please provide valid phone number")
+    @Pattern(regexp = "^\\d{3}-\\d{3}-\\d{4}$",message = "Please provide valid phone number")
     @Column(nullable = false)
     private String phone;
 
