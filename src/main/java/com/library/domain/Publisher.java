@@ -20,11 +20,12 @@ public class Publisher {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message="Please provide name")
+    @NotNull(message="Please provide publisher name")
     @Size(min=2, max=50,message="Your name '${validatedValue}' must be between {min} and {max} chars long")
     @Column(length = 50,nullable = false)
     private String name;
 
+    @NotNull(message="Please provide select builtIn")
     @Column(nullable = false)
     private Boolean builtIn = false;
 

@@ -20,6 +20,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message="Please provide role")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private RoleType name;

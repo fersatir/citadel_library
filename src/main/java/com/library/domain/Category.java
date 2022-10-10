@@ -19,8 +19,8 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message="Please provide name")
-    @Size(min=2, max=80,message="Your name '${validatedValue}' must be between {min} and {max} chars long")
+    @NotNull(message="Please provide category name")
+    @Size(min=2, max=80,message="Category name '${validatedValue}' must be between {min} and {max} chars long")
     @Column(length = 80,nullable = false)
     private String name;
 

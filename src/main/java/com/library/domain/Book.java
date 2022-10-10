@@ -26,7 +26,7 @@ public class Book {
     private Long id;
 
     @NotNull(message="Please provide book name")
-    @Size(min=2, max=80,message="Your name '${validatedValue}' must be between {min} and {max} chars long")
+    @Size(min=2, max=80,message="Book name '${validatedValue}' must be between {min} and {max} chars long")
     @Column(length = 80,nullable = false)
     private String name;
 
@@ -52,19 +52,18 @@ public class Book {
 
     //regex format eklenecek format : AA-999 [A-Z]{2}\-\d{3}
     @NotNull(message="Please provide shelf code ")
-    @Size(min=6, max=6,message="ShelfCode '${validatedValue}' must be between {min} and {max} chars long")
+    @Size(min=6, max=6,message="ShelfCode '${validatedValue}' must be {max} chars long")
     @Column(length = 6,nullable = false)
     //@Pattern(regexp = "^((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$",message = "Please provide valid phone number")
     private String shelfCode;
 
-    @NotNull(message="Please provide loanable")
+    @NotNull(message="Please provide active")
     @Column(nullable = false)
     private Boolean active = true;
 
-    @NotNull(message="Please provide loanable")
+    @NotNull(message="Please provide featured")
     @Column(nullable = false)
     private Boolean featured = false;
-
 
     @Column(nullable = false)
     private LocalDateTime createDate;

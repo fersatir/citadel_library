@@ -22,13 +22,15 @@ public class Loan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @NotNull(message="Please provide load date")
     @Column(nullable = false)
     private LocalDateTime loanDate;
 
+    @NotNull(message="Please provide expire date")
     @Column(nullable = false)
     private LocalDateTime expireDate;
 
+    @NotNull(message="Please provide return")
     @Column(nullable = false)
     private LocalDateTime returnDate;
 
