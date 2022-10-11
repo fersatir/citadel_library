@@ -14,7 +14,7 @@ import java.util.Set;
 
 @Service
 @AllArgsConstructor
-public class PublisherService {
+public class TestService {
 
     PublisherRepository publisherRepository;
     AuthorRepository authorRepository;
@@ -58,12 +58,12 @@ public class PublisherService {
         us.setAddress("istanbul Anadolu Yakası");
         us.setCreateDate(time);
         us.setEmail("abc@gmail.com");
-        us.setFirstName("Abdullah");
+        us.setFirstName("Ahmet Gozel");
         us.setLastName("Ok");
         us.setPassword("12345");
         us.setPhone("123-333-4444");
         us.setResetPasswordCode("12345");
-        us.setScore(100);
+        us.setScore(1);
         us.setRoles(roles);
         us.setBirthDate(dt);
 
