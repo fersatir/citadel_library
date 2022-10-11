@@ -37,7 +37,6 @@ public class Loan {
     @Column(length = 300)
     private String notes;
 
-    //TODO @jsonignore annotation koymak doğru olur mu ? sorulacak.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
