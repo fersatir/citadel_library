@@ -1,17 +1,11 @@
-package com.library.DTO;
+package com.library.dto;
 
 import com.library.domain.Author;
-import com.library.domain.Book;
 import com.library.domain.Category;
 import com.library.domain.Publisher;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
-import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -55,8 +49,18 @@ public class BookDTO {
     @NotNull(message="Please provide featured")
     private Boolean featured = false;
 
-    private LocalDateTime createDate;
+    @NotNull(message="Please provide create date")
+    private LocalDateTime createDate = LocalDateTime.now();
 
     private Boolean builtIn = false;
+
+    @NotNull(message="Please provide create author")
+    private Long author_id;
+
+    @NotNull(message="Please provide create category")
+    private Long category_id;
+
+    @NotNull(message="Please provide create publisher")
+    private Long publisher_id;
 
 }

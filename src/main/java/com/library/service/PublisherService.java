@@ -1,5 +1,6 @@
 package com.library.service;
 
+import com.library.domain.Author;
 import com.library.domain.Publisher;
 import com.library.repository.PublisherRepository;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,13 @@ public class PublisherService {
 
     public void savePublisher(Publisher publisher){
         publisherRepository.save(publisher);
+    }
+
+    public Publisher getPublisherWithId(Long id) {
+
+        Publisher publisher = publisherRepository.findById(id).orElse(null);
+
+        return publisher;
     }
 
 }
