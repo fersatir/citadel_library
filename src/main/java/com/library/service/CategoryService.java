@@ -18,4 +18,12 @@ public class CategoryService {
 
         return category;
     }
+
+    public Category getCategoryWithId(Long id) {
+
+       Category category= categoryRepository.findById(id).orElse(null);
+
+        return category;
+    }
+
 }
