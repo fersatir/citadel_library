@@ -9,12 +9,12 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://ec2-52-212-228-71.eu-west-1.compute.amazonaws.com:5432/dc51k1k41to77b
-    username: hmoyczdieqpxkz
-    password: b67f2b7aeb8f132b1cecc623efa67beb98448f9fec66757616718baae2e05052
-    #url: jdbc:postgresql://localhost:5432/CitadelLibrary
-    #username: realestate_user
-    #password: cosmos12345
+    #url: jdbc:postgresql://ec2-52-212-228-71.eu-west-1.compute.amazonaws.com:5432/dc51k1k41to77b
+    #username: hmoyczdieqpxkz
+    #password: b67f2b7aeb8f132b1cecc623efa67beb98448f9fec66757616718baae2e05052
+    url: jdbc:postgresql://localhost:5432/CitadelLibrary
+    username: realestate_user
+    password: cosmos12345
     driver-class-name: org.postgresql.Driver
 
   jpa:
