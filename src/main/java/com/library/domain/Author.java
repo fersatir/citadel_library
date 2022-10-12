@@ -20,8 +20,6 @@ public class Author {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotNull(message="Please provide name")
-    @Size(min=4, max=70,message="Your name '${validatedValue}' must be between {min} and {max} chars long")
     @Column(length = 70,nullable = false)
     private String name;
 
