@@ -33,6 +33,6 @@ build/
 .vscode/
 
 ### Application.yml ###
-*.yml
+application.yml
 
 
