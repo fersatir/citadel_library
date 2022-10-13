@@ -49,6 +49,8 @@ public class UserService {
         userRepository.save(user);
         UserDTO userDTO = userMapper.userToUserDTO(user);
         return userDTO;
+
+        // TODO mapper'a hashlenmemiş password göndermek güvenlik açısından ne kadar mantıklı?
     }
 
 }

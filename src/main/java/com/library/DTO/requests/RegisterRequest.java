@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -47,7 +47,7 @@ public class RegisterRequest {
     @Size(min=10, max=80,message="Email '${validatedValue}' must be between {min} and {max} chars long")
     private String email;
 
-    @JsonIgnore
+
     @NotNull(message="Please provide password")
     private String password;
 
