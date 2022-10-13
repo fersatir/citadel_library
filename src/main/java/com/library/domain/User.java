@@ -36,9 +36,8 @@ public class User {
     @Column(length = 30,nullable = false)
     private String lastName;
 
-    // TODO score ile ilgili detaylar sorulacak
     @NotNull(message="Please provide score")
-    @Size(min=-2, max=2,message="Score '${validatedValue}' must be between {min} and {max} chars long")
+    //@Size(min=-2, max=2,message="Score '${validatedValue}' must be between {min} and {max} chars long")
     @Column(nullable = false)
     private Integer score = 0;
 
