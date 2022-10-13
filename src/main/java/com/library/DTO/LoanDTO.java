@@ -1,4 +1,4 @@
-package com.library.DTO.requests;
+package com.library.DTO;
 
 import com.library.domain.Book;
 import com.library.domain.User;
@@ -6,10 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
@@ -18,7 +15,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoanRequest {
+public class LoanDTO {
 
     private Long id;
 
@@ -35,9 +32,9 @@ public class LoanRequest {
     private String notes;
 
 
-    private User user;
+    private Long userId;
 
 
-    private Book book;
+    private Long bookId;
 
 }

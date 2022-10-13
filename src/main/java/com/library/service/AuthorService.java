@@ -1,6 +1,6 @@
 package com.library.service;
 
-import com.library.DTO.requests.AuthorRequest;
+import com.library.dto.requests.AuthorRequest;
 import com.library.domain.Author;
 import com.library.repository.AuthorRepository;
 import lombok.AllArgsConstructor;
@@ -24,4 +24,11 @@ public class AuthorService {
 
         return author;
     }
+    public Author getAuthorWithId(Long id) {
+
+        Author author = authorRepository.findById(id).orElse(null);
+
+        return author;
+    }
+
 }

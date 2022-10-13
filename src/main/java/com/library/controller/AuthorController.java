@@ -1,6 +1,6 @@
 package com.library.controller;
 
-import com.library.DTO.requests.AuthorRequest;
+import com.library.dto.requests.AuthorRequest;
 import com.library.domain.Author;
 import com.library.service.AuthorService;
 import lombok.AllArgsConstructor;

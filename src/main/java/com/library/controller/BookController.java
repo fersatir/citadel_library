@@ -1,8 +1,9 @@
 package com.library.controller;
 
-import com.library.DTO.BookDTO;
+import com.library.dto.BookDTO;
 import com.library.service.BookService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,9 +22,9 @@ public class BookController {
     @PostMapping("/add")
     public ResponseEntity<BookDTO> createBook(@Valid @RequestBody BookDTO bookDto){
 
-        BookDTO book = bookService.createAuthor(bookDto);
+        BookDTO book = bookService.createBook(bookDto);
 
-        return ResponseEntity.ok(book);
+        return new ResponseEntity<>(book, HttpStatus.CREATED);
     }
 
 
