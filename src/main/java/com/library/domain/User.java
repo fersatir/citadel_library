@@ -61,7 +61,7 @@ public class User {
     @Column(length = 80,nullable = false)
     private String email;
 
-    @JsonIgnore
+
     @NotNull(message="Please provide password")
     @Column(nullable = false)
     private String password;
