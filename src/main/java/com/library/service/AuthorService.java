@@ -1,6 +1,6 @@
 package com.library.service;
 
-import com.library.dto.requests.AuthorRequest;
+import com.library.dto.AuthorDTO;
 import com.library.domain.Author;
 import com.library.repository.AuthorRepository;
 import lombok.AllArgsConstructor;
@@ -13,20 +13,14 @@ public class AuthorService {
     AuthorRepository authorRepository;
 
 
-    public Author createAuthor(AuthorRequest authorRequest) {
+    public Author createAuthor(AuthorDTO authorDTO) {
 
         Author author = new Author();
 
-        author.setName(authorRequest.getName());
-        author.setBuiltIn(authorRequest.getBuiltIn());
+        author.setName(authorDTO.getName());
+        author.setBuiltIn(authorDTO.getBuiltIn());
 
         authorRepository.save(author);
-
-        return author;
-    }
-    public Author getAuthorWithId(Long id) {
-
-        Author author = authorRepository.findById(id).orElse(null);
 
         return author;
     }
