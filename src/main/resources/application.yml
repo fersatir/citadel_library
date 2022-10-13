@@ -9,9 +9,10 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/citadel_library
-    username: library_user
-    password: admin
+    url: jdbc:postgresql://localhost:5432/CitadelLibrary
+    username: realestate_user
+    password: cosmos12345
+
     #url: jdbc:postgresql://ec2-52-208-164-5.eu-west-1.compute.amazonaws.com:5432/ds71c964v92pl
     #username: qauzqldpnervwi
     #password: 26685d121a19834cd0394b8e6661cf0b81f0b7b65d1e0a50ce9ca99d2259ab39
