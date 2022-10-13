@@ -22,5 +22,4 @@ public class PublisherService {
 
         return publisher;
     }
-
 }

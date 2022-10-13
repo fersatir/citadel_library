@@ -4,7 +4,6 @@ import com.library.domain.Book;
 import com.library.dto.BookDTO;
 import com.library.dto.mapper.BookMapper;
 import com.library.repository.BookRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
