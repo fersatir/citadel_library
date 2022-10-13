@@ -1,4 +1,4 @@
-package com.library.dto.requests;
+package com.library.dto;
 
 
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthorRequest {
+public class AuthorDTO {
 
     @NotNull(message="Please provide name")
     @Size(min=4, max=70,message="Your name '${validatedValue}' must be between {min} and {max} chars long")

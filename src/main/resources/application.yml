@@ -9,7 +9,6 @@ server:
 
 spring:
   datasource:
-
     url: jdbc:postgresql://localhost:5432/citadel_library
     username: library_user
     password: admin
