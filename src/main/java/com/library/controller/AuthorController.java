@@ -1,6 +1,6 @@
 package com.library.controller;
 
-import com.library.dto.requests.AuthorRequest;
+import com.library.dto.AuthorDTO;
 import com.library.domain.Author;
 import com.library.service.AuthorService;
 import lombok.AllArgsConstructor;
@@ -21,9 +21,9 @@ public class AuthorController {
     AuthorService authorService;
 
     @PostMapping("/add")
-    public ResponseEntity<Author> createAuthor(@Valid @RequestBody AuthorRequest authorRequest){
+    public ResponseEntity<Author> createAuthor(@Valid @RequestBody AuthorDTO authorDTO){
 
-        Author author = authorService.createAuthor(authorRequest);
+        Author author = authorService.createAuthor(authorDTO);
 
         return new ResponseEntity<>(author, HttpStatus.CREATED);
     }

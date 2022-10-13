@@ -16,11 +16,5 @@ public class PublisherService {
         publisherRepository.save(publisher);
     }
 
-    public Publisher getPublisherWithId(Long id) {
-
-        Publisher publisher = publisherRepository.findById(id).orElse(null);
-
-        return publisher;
-    }
 
 }

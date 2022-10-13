@@ -1,40 +1,47 @@
 package com.library.service;
 
+import com.library.domain.Author;
 import com.library.domain.Book;
+import com.library.domain.Category;
+import com.library.domain.Publisher;
 import com.library.dto.BookDTO;
 import com.library.dto.mapper.BookMapper;
+import com.library.repository.AuthorRepository;
 import com.library.repository.BookRepository;
+import com.library.repository.CategoryRepository;
+import com.library.repository.PublisherRepository;
+
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class BookService {
 
     BookRepository bookRepository;
-    AuthorService authorService;
-    CategoryService categoryService;
-    PublisherService publisherService;
+
+    AuthorRepository authorRepository;
+
+    CategoryRepository categoryRepository;
+
+    PublisherRepository publisherRepository;
     BookMapper bookMapper;
 
-    @Autowired
-    public BookService(BookRepository bookRepository, AuthorService authorService, CategoryService categoryService, PublisherService publisherService, BookMapper bookMapper) {
-        this.bookRepository = bookRepository;
-        this.authorService = authorService;
-        this.categoryService = categoryService;
-        this.publisherService = publisherService;
-        this.bookMapper = bookMapper;
-    }
+
 
     public BookDTO createBook(BookDTO bookDto) {
 
         Book book = bookMapper.bookDTOToBook(bookDto);
-        book.setCategory(categoryService.getCategoryWithId(bookDto.getCategory_id()));
-        book.setAuthor(authorService.getAuthorWithId(bookDto.getAuthor_id()));
-        book.setPublisher(publisherService.getPublisherWithId(bookDto.getPublisher_id()));
+
+        Category category = categoryRepository.findById(bookDto.getCategory_id()).orElse(null);
+        Author author = authorRepository.findById(bookDto.getAuthor_id()).orElse(null);
+        Publisher publisher = publisherRepository.findById(bookDto.getPublisher_id()).orElse(null);
+
+
+        book.setCategory(category);
+        book.setAuthor(author);
+        book.setPublisher(publisher);
 
         bookRepository.save(book);
 
@@ -44,5 +51,28 @@ public class BookService {
     }
 
 
+    public BookDTO updateBookById(Long id, BookDTO bookDTO) {
 
+        Book foundBook = bookRepository.findById(id).orElse(null);
+
+        if(foundBook.getBuiltIn()){
+            throw new RuntimeException("It is not permitted to change");
+        }
+
+        bookDTO.setId(id);
+
+        foundBook = bookMapper.bookDTOToBook(bookDTO);
+
+        Category category = categoryRepository.findById(bookDTO.getCategory_id()).orElse(null);
+        Author author = authorRepository.findById(bookDTO.getAuthor_id()).orElse(null);
+        Publisher publisher = publisherRepository.findById(bookDTO.getPublisher_id()).orElse(null);
+
+        foundBook.setCategory(category);
+        foundBook.setAuthor(author);
+        foundBook.setPublisher(publisher);
+
+        bookRepository.save(foundBook);
+
+        return bookDTO;
+    }
 }

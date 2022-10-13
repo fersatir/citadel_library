@@ -1,8 +1,5 @@
 package com.library.dto;
 
-import com.library.domain.Author;
-import com.library.domain.Category;
-import com.library.domain.Publisher;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,7 +32,6 @@ public class BookDTO {
 
     private File image;
 
-    @NotNull(message="Please provide loanable")
     private Boolean loanable = true;
 
     @NotNull(message="Please provide shelf code ")
@@ -43,10 +39,8 @@ public class BookDTO {
     @Pattern(regexp = "^[A-Z]{2}-\\d{3}$",message = "Please provide valid shelf code")
     private String shelfCode;
 
-    @NotNull(message="Please provide active")
     private Boolean active = true;
 
-    @NotNull(message="Please provide featured")
     private Boolean featured = false;
 
     @NotNull(message="Please provide create date")
