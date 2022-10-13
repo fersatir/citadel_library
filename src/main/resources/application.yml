@@ -9,9 +9,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/citadel_library
-    username: library_user
-    password: 12345
+    url: jdbc:postgresql://localhost:5432/CitadelLibrary
+    username: realestate_user
+    password: cosmos12345
     driver-class-name: org.postgresql.Driver
 
       #url: jdbc:postgresql://ec2-52-208-164-5.eu-west-1.compute.amazonaws.com:5432/ds71c964v92pl
