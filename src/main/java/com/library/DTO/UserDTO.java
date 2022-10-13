@@ -34,9 +34,9 @@ public class UserDTO {
         Set<String> rolesStr= new HashSet<>();
 
         roles.forEach(r->  {
-            if (r.getName().equals(RoleType.ROLE_ADMIN)) rolesStr.add("Administrator");
-            else if (r.getName().equals(RoleType.ROLE_STAFF)) rolesStr.add("Staff");
-            else  rolesStr.add("Member");
+            if (r.getName().equals(RoleType.ROLE_ADMIN)){ rolesStr.add("Administrator");}
+            else if (r.getName().equals(RoleType.ROLE_STAFF)) {rolesStr.add("Staff");}
+            else  {rolesStr.add("Member");}
         });
         this.roles=rolesStr;
     }
