@@ -7,6 +7,7 @@ import com.library.dto.UserDTO;
 import com.library.dto.mapper.UserMapper;
 import com.library.dto.requests.RegisterRequest;
 import com.library.exception.ConflictException;
+import com.library.dto.UserCreateDTO;
 import com.library.repository.RoleRepository;
 import com.library.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -20,9 +21,29 @@ import java.util.Set;
 public class UserService {
 
     private UserRepository userRepository;
+
     private RoleRepository roleRepository;
     private UserMapper userMapper;
 
+
+    public UserCreateDTO createUser(UserCreateDTO userCreateDTO) {
+
+        //TODO kayıt yapmaya çalışan kullanıcının role bilgisine göre (admin, employee), kayıt edilecek kullanıcıya role atanacak
+
+        User user = userMapper.userCreateDTOToUser(userCreateDTO);
+
+        Role ro = new Role();
+        ro.setName(roleRepository.findById(userCreateDTO.getRoleId()).get().getName());
+        Set<Role> roles = new HashSet<>();
+        roles.add(ro);
+
+        userRepository.save(user);
+
+        userCreateDTO.setId(user.getId());
+
+        return userCreateDTO;
+
+    }
 
     public UserDTO register(RegisterRequest request){
         if(userRepository.existsByEmail(request.getEmail())) {

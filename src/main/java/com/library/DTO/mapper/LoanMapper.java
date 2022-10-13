@@ -1,9 +1,9 @@
-package com.library.DTO.mapper;
-
+package com.library.dto.mapper;
 import com.library.DTO.LoanDTO;
-import com.library.domain.Book;
+
 import com.library.domain.Loan;
-import com.library.dto.BookDTO;
+
+
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel="spring")
