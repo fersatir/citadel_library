@@ -1,7 +1,11 @@
-package com.library.DTO.mapper;
+package com.library.dto.mapper;
 
 import com.library.DTO.LoanDTO;
+
 import com.library.domain.Loan;
+
+
+
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel="spring")
