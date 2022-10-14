@@ -11,6 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CLResponse {
 
-    boolean success;
-    String message;
+   private boolean success;
+   private String message;
 }

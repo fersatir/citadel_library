@@ -13,6 +13,7 @@ import com.library.exception.message.ErrorMessage;
 import com.library.repository.RoleRepository;
 import com.library.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -26,6 +27,7 @@ public class UserService {
 
     private RoleRepository roleRepository;
     private UserMapper userMapper;
+    private PasswordEncoder passwordEncoder;
 
 
     public UserCreateDTO createUser(UserCreateDTO userCreateDTO) {
@@ -51,6 +53,8 @@ public class UserService {
         if(userRepository.existsByEmail(request.getEmail())) {
             throw new ConflictException(String.format(ErrorMessage.EMAIL_ALREADY_EXIST_MESSAGE,request.getEmail()));}
 
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+
         Role role= roleRepository.findByName(RoleType.ROLE_MEMBER).orElseThrow(()->
                 new ResourceNotFoundException(String.format(ErrorMessage.ROLE_NOT_FOUND_MESSAGE, RoleType.ROLE_MEMBER.name())));
 
@@ -62,7 +66,7 @@ public class UserService {
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
         user.setAddress(request.getAddress());
-        user.setPassword(request.getPassword());// security eklendikten sonra hashlenmiş password set edilecek
+        user.setPassword(encodedPassword);// security eklendikten sonra hashlenmiş password set edilecek
         user.setBirthDate(request.getBirthDate());
         user.setCreateDate(request.getCreateDate());
         user.setPhone(request.getPhone());
