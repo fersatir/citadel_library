@@ -8,6 +8,8 @@ import com.library.dto.mapper.UserMapper;
 import com.library.dto.requests.RegisterRequest;
 import com.library.exception.ConflictException;
 import com.library.dto.UserCreateDTO;
+import com.library.exception.ResourceNotFoundException;
+import com.library.exception.message.ErrorMessage;
 import com.library.repository.RoleRepository;
 import com.library.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -47,8 +49,10 @@ public class UserService {
 
     public UserDTO register(RegisterRequest request){
         if(userRepository.existsByEmail(request.getEmail())) {
-            throw new ConflictException("Email already exist");}
-        Role role= roleRepository.findByName(RoleType.ROLE_MEMBER).orElse(null);
+            throw new ConflictException(String.format(ErrorMessage.EMAIL_ALREADY_EXIST_MESSAGE,request.getEmail()));}
+
+        Role role= roleRepository.findByName(RoleType.ROLE_MEMBER).orElseThrow(()->
+                new ResourceNotFoundException(String.format(ErrorMessage.ROLE_NOT_FOUND_MESSAGE, RoleType.ROLE_MEMBER.name())));
 
 
         Set <Role> roles = new HashSet<>();
@@ -71,7 +75,6 @@ public class UserService {
         UserDTO userDTO = userMapper.userToUserDTO(user);
         return userDTO;
 
-        // TODO mapper'a hashlenmemiş password göndermek güvenlik açısından ne kadar mantıklı?
     }
 
 }
