@@ -25,22 +25,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private UserDetailsService userDetailsService;
 
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().
-                authorizeRequests().antMatchers("/register","/login").permitAll().anyRequest().authenticated();
+        http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().authorizeRequests().antMatchers("/login","/register").permitAll()
+                .anyRequest().authenticated();
 
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-    }
-
-    private AuthTokenFilter authenticationJwtTokenFilter() {
-        return new AuthTokenFilter();
-    }
-
-    @Bean
-    protected AuthenticationManager authenticationManager() throws Exception {
-        return super.authenticationManager();
+        http.addFilterBefore(authJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
@@ -49,7 +40,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public AuthTokenFilter authJwtTokenFilter() {
+        return new AuthTokenFilter();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    @Override
+    protected AuthenticationManager authenticationManager() throws Exception {
+        //Auth manager olarak neyi kullanacağımı gösteriyorum
+        return super.authenticationManager();
     }
 }

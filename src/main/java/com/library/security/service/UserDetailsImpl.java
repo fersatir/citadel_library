@@ -1,5 +1,6 @@
 package com.library.security.service;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.library.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,6 +23,7 @@ public class UserDetailsImpl implements UserDetails {
     private Long id;
     private String email;
 
+    @JsonIgnore
     private String password;
 
     private Collection<? extends GrantedAuthority> authorities;
