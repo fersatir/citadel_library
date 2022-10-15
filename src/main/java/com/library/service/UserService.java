@@ -6,17 +6,22 @@ import com.library.domain.enums.RoleType;
 import com.library.dto.UserDTO;
 import com.library.dto.mapper.UserMapper;
 import com.library.dto.requests.RegisterRequest;
+import com.library.exception.BadRequestException;
 import com.library.exception.ConflictException;
 import com.library.dto.UserCreateDTO;
 import com.library.exception.ResourceNotFoundException;
 import com.library.exception.message.ErrorMessage;
+import com.library.repository.LoanRepository;
 import com.library.repository.RoleRepository;
 import com.library.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -25,6 +30,7 @@ public class UserService {
 
     private UserRepository userRepository;
 
+    private LoanRepository loanRepository;
     private RoleRepository roleRepository;
     private UserMapper userMapper;
     private PasswordEncoder passwordEncoder;
@@ -80,5 +86,36 @@ public class UserService {
         return userDTO;
 
     }
+
+    public List<UserDTO> getAllUsers() {
+        List<User> users = userRepository.findAll();
+
+        return userMapper.map(users);
+    }
+
+    public UserDTO getUser(Long id){
+       User user= userRepository.findById(id).orElseThrow(()->
+               new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, id)));
+       return userMapper.userToUserDTO(user);
+    }
+
+  public UserDTO removeById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(()->
+                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, id)));
+
+       // boolean exists= loanRepository.existsByUserId(user);
+       // if(exists){
+       //     throw new BadRequestException("User used by loans");
+       // } if the user has related records in loans delete operation isn't permitted. (Bunu eklicez)
+
+        if (user.getBuiltIn()) {
+        throw  new BadRequestException("Not_Permitted");
+        }
+
+        userRepository.deleteById(id);
+        return userMapper.userToUserDTO(user);
+
+  }
+
 
 }
