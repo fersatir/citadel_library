@@ -1,19 +1,23 @@
 package com.library.service;
 
-import com.library.DTO.LoanDTO;
+import com.library.dto.LoanDTO;
 import com.library.domain.Book;
 import com.library.domain.Loan;
 import com.library.domain.User;
 import com.library.dto.mapper.LoanMapper;
 import com.library.exception.BadRequestException;
+import com.library.exception.ResourceNotFoundException;
 import com.library.exception.message.ErrorMessage;
 import com.library.repository.BookRepository;
 import com.library.repository.LoanRepository;
 import com.library.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Service
@@ -26,40 +30,50 @@ public class LoanService {
     BookRepository bookRepository;
     UserRepository userRepository;
 
+
     public LoanDTO createLoan(LoanDTO loanDTO){
 
-        checkLoanTimeIsCorrect(loanDTO.getLoanDate(), loanDTO.getReturnDate());
+      LocalDateTime ld = LocalDateTime.now();
+
+        Book book = bookRepository.findById(loanDTO.getBookId()).orElseThrow(() -> new ResourceNotFoundException
+                (String.format(ErrorMessage.BOOK_NOT_FOUND_MESSAGE, loanDTO.getBookId())));
+      Boolean isLoanable =  book.getLoanable();
+        if(!isLoanable){
+            throw new BadRequestException("kitap alamazsın müsait değil.");
+        }
+
+        User user= userRepository.findById(loanDTO.getUserId()).orElseThrow(()->
+                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, loanDTO.getUserId())));
+
+
+         List<Loan> expireDates = loanRepository.expireDate(loanDTO.getUserId());
+
+           for (Loan l:expireDates) {
+               if(l.getReturnDate() == null){
+                 Boolean expired =  l.getExpireDate().isBefore(ld);
+                   System.out.println(expired);
+                 if(expired)  throw new BadRequestException("kitap alamazsın iade tarihini geciktirdiğin için kitap alamazsın.");
+               }
+           }
+
+
+
 
         Loan loan = new Loan();
-
-        Book book = bookRepository.findById(loanDTO.getBookId()).orElse(null);
-        loan.setBook(book);
-
-
-        User user = userRepository.findById(loanDTO.getUserId()).orElse(null);
         loan.setUser(user);
+        loan.setBook(book);
+        loan.setExpireDate(ld.plusDays(7));
+        loan.setLoanDate(ld);
 
-        loan = loanMapper.loanDTOToLoan(loanDTO);
+       loanRepository.save(loan);
 
-        loanRepository.save(loan);
-        loanDTO.setId(loan.getId());
+       loanDTO.setId(loan.getId());
+       loanDTO.setExpireDate(loan.getExpireDate());
+       book.setLoanable(false);
+       bookRepository.save(book);
+
         return loanDTO;
 
-    }
-
-
-    private void checkLoanTimeIsCorrect(LocalDateTime loanDate, LocalDateTime returnDate) {
-        LocalDateTime now = LocalDateTime.now();
-
-        if (loanDate.isBefore(now)) {
-            throw new BadRequestException(ErrorMessage.LOAN_TIME_INCORRECT_MESSAGE);
-        }
-        boolean isEqual = loanDate.isEqual(returnDate);
-        boolean isBefore = loanDate.isBefore(returnDate);
-
-        if (isEqual || !isBefore) {
-            throw new BadRequestException(ErrorMessage.LOAN_TIME_INCORRECT_MESSAGE);
-        }
     }
 
 
