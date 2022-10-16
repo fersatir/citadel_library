@@ -4,13 +4,13 @@ package com.library.repository;
 import com.library.domain.Loan;
 import com.library.domain.User;
 import com.library.dto.response.LoanResponse;
+import com.library.dto.response.LoanResponseBook;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -28,4 +28,7 @@ public interface LoanRepository extends JpaRepository<Loan,Long> {
 
   @Query("SELECT new com.library.dto.response.LoanResponse(u) FROM Loan u WHERE u.user.id = ?1 and u.id = ?2")
   LoanResponse getAutUserLoanId(Long idLogin, Long id);
+
+  @Query("SELECT new com.library.dto.response.LoanResponseBook(u) FROM Loan u WHERE u.book.id = ?1")
+  Page<LoanResponseBook> getSpecifiedBookLoan(Long id, Pageable pageable);
 }
