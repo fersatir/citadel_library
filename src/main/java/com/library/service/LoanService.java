@@ -6,6 +6,8 @@ import com.library.domain.Loan;
 import com.library.domain.User;
 import com.library.dto.mapper.LoanMapper;
 import com.library.dto.response.LoanResponse;
+import com.library.dto.response.LoanResponseBook;
+import com.library.dto.response.LoanResponseBookUser;
 import com.library.exception.BadRequestException;
 import com.library.exception.ResourceNotFoundException;
 import com.library.exception.message.ErrorMessage;
@@ -81,6 +83,7 @@ public class LoanService {
                 new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, idLogin)));
 
         Page<LoanResponse> authUserLoans = loanRepository.getAutUserLoan(idLogin,pageable);
+        if(authUserLoans.isEmpty()) throw new BadRequestException("Kullanıcıya ait kayıt bulunamamıştır.");
 
         return authUserLoans;
     }
@@ -93,5 +96,32 @@ public class LoanService {
         if(authUserLoan == null) throw new BadRequestException("Kullanıcıya ait kayıt bulunamamıştır.");
 
         return authUserLoan;
+    }
+
+    public Page<LoanResponse> getLoansSpecifiedUserById(Pageable pageable, Long id) {
+        User user= userRepository.findById(id).orElseThrow(()->
+                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, id)));
+
+        Page<LoanResponse> authUserLoans = loanRepository.getAutUserLoan(id,pageable);
+        if(authUserLoans.isEmpty()) throw new BadRequestException("Kullanıcıya ait kayıt bulunamamıştır.");
+
+        return authUserLoans;
+    }
+
+    public Page<LoanResponseBook> getLoansSpecifiedBookById(Pageable pageable, Long id) {
+        Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException
+                (String.format(ErrorMessage.BOOK_NOT_FOUND_MESSAGE, id)));
+
+        Page<LoanResponseBook> authUserLoans = loanRepository.getSpecifiedBookLoan(id,pageable);
+        if(authUserLoans.isEmpty()) throw new BadRequestException("İlgili kitaba ait kayıt bulunamamıştır.");
+
+        return authUserLoans;
+    }
+
+    public Loan getloanBookAndUser(Long id) {
+        Loan loan = loanRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException
+                (String.format(ErrorMessage.LOAN_NOT_FOUND_MESSAGE, id)));
+
+        return loan;
     }
 }
