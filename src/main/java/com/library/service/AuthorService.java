@@ -1,28 +1,56 @@
 package com.library.service;
 
-import com.library.dto.AuthorDTO;
 import com.library.domain.Author;
+import com.library.exception.ConflictException;
+import com.library.exception.ResourceNotFoundException;
+import com.library.exception.message.ErrorMessage;
 import com.library.repository.AuthorRepository;
+import com.library.repository.BookRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
 public class AuthorService {
 
+    @Autowired
     AuthorRepository authorRepository;
+    @Autowired
+    BookRepository bookRepository;
 
+    public Author getAuthorById(Long id) {
+        return authorRepository.findById(id).orElseThrow(()->
+                new ResourceNotFoundException(String.format(ErrorMessage.AUTHOR_NOT_FOUND_MESSAGE,id)));
+    }
 
-    public Author createAuthor(AuthorDTO authorDTO) {
+    public Page<Author> getAllAuthorsWithPage(Pageable pageable){
+        return authorRepository.findAllPublishersWithPage(pageable);
+    }
 
-        Author author = new Author();
-
-        author.setName(authorDTO.getName());
-        author.setBuiltIn(authorDTO.getBuiltIn());
-
+    public void createAuthor(Author author){
         authorRepository.save(author);
+    }
 
-        return author;
+    public Author updateAuthor(Author author, Long id) {
+        Author foundAuthor = getAuthorById(id);
+        foundAuthor.setName(author.getName());
+        foundAuthor.setBuiltIn(author.getBuiltIn());
+
+        authorRepository.save(foundAuthor);
+        return foundAuthor;
+    }
+
+    public Author deleteAuthor(Long id) {
+        Author foundAuthor = getAuthorById(id);
+
+        if (bookRepository.existsBookAuthorId(id) != null){
+            throw new ConflictException(String.format(ErrorMessage.AUTHOR_NOT_DELETE_MESSAGE,id));
+        }else{
+            authorRepository.deleteById(id);
+        }
+        return foundAuthor;
     }
 
 }
