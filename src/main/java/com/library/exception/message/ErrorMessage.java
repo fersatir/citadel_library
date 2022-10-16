@@ -11,7 +11,7 @@ public class ErrorMessage {
     public final static String INVALID_BOOK_PARAMETER_MESSAGE="Please write valid parameter";
 
 
-
+    /* CATEGORY EXCEPTION MESSAGES */
     public final static String CATEGORY_NOT_FOUND_MESSAGE="Category with id %d not found";
     public final static String CATEGORY_NOT_DELETE_MESSAGE="Category has book category id %d ";
 
@@ -19,4 +19,8 @@ public class ErrorMessage {
     /* PUBLISHER EXCEPTION MESSAGES */
     public final static String PUBLISHER_NOT_FOUND_MESSAGE="Publisher with id %d not found";
     public final static String PUBLISHER_NOT_DELETE_MESSAGE="Publisher has book publisher id %d";
+
+    /* AUTHOR EXCEPTION MESSAGES */
+    public final static String AUTHOR_NOT_FOUND_MESSAGE="Author with id %d not found";
+    public final static String AUTHOR_NOT_DELETE_MESSAGE="Author has book Author id %d";
 }
