@@ -13,4 +13,5 @@ public class CLResponse {
 
    private boolean success;
    private String message;
+
 }
