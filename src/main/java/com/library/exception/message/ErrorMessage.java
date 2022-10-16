@@ -13,8 +13,10 @@ public class ErrorMessage {
 
 
     public final static String CATEGORY_NOT_FOUND_MESSAGE="Category with id %d not found";
-
     public final static String CATEGORY_NOT_DELETE_MESSAGE="Category has book category id %d ";
 
 
+    /* PUBLISHER EXCEPTION MESSAGES */
+    public final static String PUBLISHER_NOT_FOUND_MESSAGE="Publisher with id %d not found";
+    public final static String PUBLISHER_NOT_DELETE_MESSAGE="Publisher has book publisher id %d";
 }

@@ -1,7 +1,5 @@
 package com.library.controller;
 
-import com.library.domain.Book;
-import com.library.domain.Category;
 import com.library.dto.response.ReportMostPopularBookDTO;
 import com.library.dto.response.ReportStatisticDTO;
 import com.library.service.ReportService;
