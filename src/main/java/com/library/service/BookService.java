@@ -6,12 +6,18 @@ import com.library.domain.Category;
 import com.library.domain.Publisher;
 import com.library.dto.BookDTO;
 import com.library.dto.mapper.BookMapper;
-import com.library.repository.AuthorRepository;
-import com.library.repository.BookRepository;
-import com.library.repository.CategoryRepository;
-import com.library.repository.PublisherRepository;
+import com.library.exception.BadRequestException;
+import com.library.exception.ResourceNotFoundException;
+import com.library.exception.message.ErrorMessage;
+import com.library.repository.*;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -27,7 +33,18 @@ public class BookService {
     PublisherRepository publisherRepository;
     BookMapper bookMapper;
 
+    LoanRepository loanRepository;
 
+
+    public BookDTO getOneBookById(Long id) {
+
+        Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException
+                (String.format(ErrorMessage.BOOK_NOT_FOUND_MESSAGE, id)));
+
+        BookDTO bookDTO = bookMapper.bookToBookDTO(book);
+
+        return bookDTO;
+    }
 
     public BookDTO createBook(BookDTO bookDto) {
 
@@ -54,7 +71,7 @@ public class BookService {
 
         Book foundBook = bookRepository.findById(id).orElse(null);
 
-        if(foundBook.getBuiltIn()){
+        if (foundBook.getBuiltIn()) {
             throw new RuntimeException("It is not permitted to change");
         }
 
@@ -73,5 +90,34 @@ public class BookService {
         bookRepository.save(foundBook);
 
         return bookDTO;
+    }
+
+    public BookDTO deleteOneBookById(Long id) {
+
+        Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException
+                (String.format(ErrorMessage.BOOK_NOT_FOUND_MESSAGE, id)));
+
+        if (!book.getLoanable()) {
+            throw new BadRequestException(String.format(ErrorMessage.BOOK_NOT_AVAILABLE_TO_REMOVE_MESSAGE, id));
+        }
+        BookDTO bookDTO = bookMapper.bookToBookDTO(book);
+
+        return bookDTO;
+    }
+
+
+    @Transactional(readOnly = true)
+    public Page<BookDTO> findAllWithPage(Optional<String> query, Optional<Long> categoryId, Optional<Long> authorId,
+                                         Optional<Long> publisherId, Pageable pageable) {
+
+        Page<BookDTO> book = null;
+
+        if (query.isPresent() || categoryId.isPresent() || authorId.isPresent() || publisherId.isPresent()) {
+            book = bookRepository.findByQueryAndCatAndAuthorAndPublisherWithPage(query, categoryId,
+                    authorId, publisherId, pageable);
+            return book;
+        } else {
+            throw new BadRequestException(ErrorMessage.INVALID_BOOK_PARAMETER_MESSAGE);
+        }
     }
 }
