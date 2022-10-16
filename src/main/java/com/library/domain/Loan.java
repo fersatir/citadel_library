@@ -28,8 +28,8 @@ public class Loan {
     @Column(nullable = false)
     private LocalDateTime expireDate;
 
-    @NotNull(message="Please provide return")
-    @Column(nullable = false)
+
+    @Column
     private LocalDateTime returnDate;
 
     @Column(length = 300)

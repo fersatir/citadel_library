@@ -1,0 +1,90 @@
+2022-10-16 19:47:31,031 INFO  [restartedMain] com.library.CitadelLibraryApplication:Starting CitadelLibraryApplication using Java 18.0.1.1 on abdulsamet-mbp with PID 8223 (/Users/abdulsametkaya/IdeaProjects/citadel_library/target/classes started by abdulsametkaya in /Users/abdulsametkaya/IdeaProjects/citadel_library)
+2022-10-16 19:47:31,032 INFO  [restartedMain] com.library.CitadelLibraryApplication:No active profile set, falling back to 1 default profile: "default"
+2022-10-16 19:47:31,092 INFO  [restartedMain] org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor:Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2022-10-16 19:47:31,093 INFO  [restartedMain] org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor:For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2022-10-16 19:47:32,631 INFO  [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate:Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-10-16 19:47:32,723 INFO  [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate:Finished Spring Data repository scanning in 79 ms. Found 7 JPA repository interfaces.
+2022-10-16 19:47:33,725 INFO  [restartedMain] org.springframework.boot.web.embedded.tomcat.TomcatWebServer:Tomcat initialized with port(s): 8080 (http)
+2022-10-16 19:47:33,734 INFO  [restartedMain] org.apache.catalina.core.StandardService:Starting service [Tomcat]
+2022-10-16 19:47:33,734 INFO  [restartedMain] org.apache.catalina.core.StandardEngine:Starting Servlet engine: [Apache Tomcat/9.0.65]
+2022-10-16 19:47:33,792 INFO  [restartedMain] org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]:Initializing Spring embedded WebApplicationContext
+2022-10-16 19:47:33,792 INFO  [restartedMain] org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext:Root WebApplicationContext: initialization completed in 2698 ms
+2022-10-16 19:47:33,901 INFO  [restartedMain] org.hibernate.jpa.internal.util.LogHelper:HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-10-16 19:47:33,942 INFO  [restartedMain] org.hibernate.Version:HHH000412: Hibernate ORM core version 5.6.11.Final
+2022-10-16 19:47:34,036 INFO  [restartedMain] org.hibernate.annotations.common.Version:HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-10-16 19:47:34,098 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource:HikariPool-1 - Starting...
+2022-10-16 19:47:34,222 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource:HikariPool-1 - Start completed.
+2022-10-16 19:47:34,234 INFO  [restartedMain] org.hibernate.dialect.Dialect:HHH000400: Using dialect: org.hibernate.dialect.PostgreSQLDialect
+2022-10-16 19:47:34,839 INFO  [restartedMain] org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator:HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-10-16 19:47:34,848 INFO  [restartedMain] org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean:Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-10-16 19:47:35,147 WARN  [restartedMain] org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration:spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-10-16 19:47:35,647 INFO  [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain:Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@49f4cb1c, org.springframework.security.web.context.SecurityContextPersistenceFilter@c7baa1f, org.springframework.security.web.header.HeaderWriterFilter@5e975a56, org.springframework.security.web.authentication.logout.LogoutFilter@4b8d5fba, com.library.security.jwt.AuthTokenFilter@3b8336d2, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@68ec9912, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2a3e3de, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2fb6ec69, org.springframework.security.web.session.SessionManagementFilter@3a839a25, org.springframework.security.web.access.ExceptionTranslationFilter@40aeef28, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@169a2438]
+2022-10-16 19:47:35,952 INFO  [restartedMain] org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer:LiveReload server is running on port 35729
+2022-10-16 19:47:35,979 INFO  [restartedMain] org.springframework.boot.web.embedded.tomcat.TomcatWebServer:Tomcat started on port(s): 8080 (http) with context path ''
+2022-10-16 19:47:35,993 INFO  [restartedMain] com.library.CitadelLibraryApplication:Started CitadelLibraryApplication in 5.495 seconds (JVM running for 6.184)
+2022-10-16 19:47:53,005 INFO  [http-nio-8080-exec-1] org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]:Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-10-16 19:47:53,006 INFO  [http-nio-8080-exec-1] org.springframework.web.servlet.DispatcherServlet:Initializing Servlet 'dispatcherServlet'
+2022-10-16 19:47:53,007 INFO  [http-nio-8080-exec-1] org.springframework.web.servlet.DispatcherServlet:Completed initialization in 1 ms
+2022-10-16 19:49:00,420 INFO  [SpringApplicationShutdownHook] org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean:Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-10-16 19:49:00,423 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource:HikariPool-1 - Shutdown initiated...
+2022-10-16 19:49:00,425 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource:HikariPool-1 - Shutdown completed.
+2022-10-16 19:49:21,982 INFO  [restartedMain] com.library.CitadelLibraryApplication:Starting CitadelLibraryApplication using Java 18.0.1.1 on abdulsamet-mbp with PID 8275 (/Users/abdulsametkaya/IdeaProjects/citadel_library/target/classes started by abdulsametkaya in /Users/abdulsametkaya/IdeaProjects/citadel_library)
+2022-10-16 19:49:21,983 INFO  [restartedMain] com.library.CitadelLibraryApplication:No active profile set, falling back to 1 default profile: "default"
+2022-10-16 19:49:22,018 INFO  [restartedMain] org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor:Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2022-10-16 19:49:22,018 INFO  [restartedMain] org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor:For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2022-10-16 19:49:22,583 INFO  [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate:Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-10-16 19:49:22,656 INFO  [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate:Finished Spring Data repository scanning in 60 ms. Found 7 JPA repository interfaces.
+2022-10-16 19:49:23,271 INFO  [restartedMain] org.springframework.boot.web.embedded.tomcat.TomcatWebServer:Tomcat initialized with port(s): 8080 (http)
+2022-10-16 19:49:23,279 INFO  [restartedMain] org.apache.catalina.core.StandardService:Starting service [Tomcat]
+2022-10-16 19:49:23,279 INFO  [restartedMain] org.apache.catalina.core.StandardEngine:Starting Servlet engine: [Apache Tomcat/9.0.65]
+2022-10-16 19:49:23,326 INFO  [restartedMain] org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]:Initializing Spring embedded WebApplicationContext
+2022-10-16 19:49:23,326 INFO  [restartedMain] org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext:Root WebApplicationContext: initialization completed in 1307 ms
+2022-10-16 19:49:23,470 INFO  [restartedMain] org.hibernate.jpa.internal.util.LogHelper:HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-10-16 19:49:23,561 INFO  [restartedMain] org.hibernate.Version:HHH000412: Hibernate ORM core version 5.6.11.Final
+2022-10-16 19:49:23,679 INFO  [restartedMain] org.hibernate.annotations.common.Version:HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-10-16 19:49:23,744 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource:HikariPool-1 - Starting...
+2022-10-16 19:49:23,889 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource:HikariPool-1 - Start completed.
+2022-10-16 19:49:23,903 INFO  [restartedMain] org.hibernate.dialect.Dialect:HHH000400: Using dialect: org.hibernate.dialect.PostgreSQLDialect
+2022-10-16 19:49:24,505 INFO  [restartedMain] org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator:HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-10-16 19:49:24,515 INFO  [restartedMain] org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean:Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-10-16 19:49:24,801 WARN  [restartedMain] org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration:spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-10-16 19:49:25,312 INFO  [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain:Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@38c90d2e, org.springframework.security.web.context.SecurityContextPersistenceFilter@1ce284dc, org.springframework.security.web.header.HeaderWriterFilter@4ba1a928, org.springframework.security.web.authentication.logout.LogoutFilter@17e889d3, com.library.security.jwt.AuthTokenFilter@16485592, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4b8d5fba, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1d7deda0, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@be47959, org.springframework.security.web.session.SessionManagementFilter@199531a0, org.springframework.security.web.access.ExceptionTranslationFilter@334122be, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@8c2d510]
+2022-10-16 19:49:25,615 INFO  [restartedMain] org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer:LiveReload server is running on port 35729
+2022-10-16 19:49:25,647 INFO  [restartedMain] org.springframework.boot.web.embedded.tomcat.TomcatWebServer:Tomcat started on port(s): 8080 (http) with context path ''
+2022-10-16 19:49:25,656 INFO  [restartedMain] com.library.CitadelLibraryApplication:Started CitadelLibraryApplication in 3.951 seconds (JVM running for 4.49)
+2022-10-16 19:49:34,879 INFO  [http-nio-8080-exec-2] org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]:Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-10-16 19:49:34,880 INFO  [http-nio-8080-exec-2] org.springframework.web.servlet.DispatcherServlet:Initializing Servlet 'dispatcherServlet'
+2022-10-16 19:49:34,885 INFO  [http-nio-8080-exec-2] org.springframework.web.servlet.DispatcherServlet:Completed initialization in 5 ms
+2022-10-16 19:54:52,970 INFO  [SpringApplicationShutdownHook] org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean:Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-10-16 19:54:52,978 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource:HikariPool-1 - Shutdown initiated...
+2022-10-16 19:54:52,988 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource:HikariPool-1 - Shutdown completed.
+2022-10-16 19:55:00,191 INFO  [restartedMain] com.library.CitadelLibraryApplication:Starting CitadelLibraryApplication using Java 18.0.1.1 on abdulsamet-mbp with PID 8381 (/Users/abdulsametkaya/IdeaProjects/citadel_library/target/classes started by abdulsametkaya in /Users/abdulsametkaya/IdeaProjects/citadel_library)
+2022-10-16 19:55:00,192 INFO  [restartedMain] com.library.CitadelLibraryApplication:No active profile set, falling back to 1 default profile: "default"
+2022-10-16 19:55:00,235 INFO  [restartedMain] org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor:Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2022-10-16 19:55:00,235 INFO  [restartedMain] org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor:For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2022-10-16 19:55:00,784 INFO  [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate:Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-10-16 19:55:00,844 INFO  [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate:Finished Spring Data repository scanning in 50 ms. Found 7 JPA repository interfaces.
+2022-10-16 19:55:01,367 INFO  [restartedMain] org.springframework.boot.web.embedded.tomcat.TomcatWebServer:Tomcat initialized with port(s): 8080 (http)
+2022-10-16 19:55:01,374 INFO  [restartedMain] org.apache.catalina.core.StandardService:Starting service [Tomcat]
+2022-10-16 19:55:01,375 INFO  [restartedMain] org.apache.catalina.core.StandardEngine:Starting Servlet engine: [Apache Tomcat/9.0.65]
+2022-10-16 19:55:01,421 INFO  [restartedMain] org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]:Initializing Spring embedded WebApplicationContext
+2022-10-16 19:55:01,422 INFO  [restartedMain] org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext:Root WebApplicationContext: initialization completed in 1186 ms
+2022-10-16 19:55:01,532 INFO  [restartedMain] org.hibernate.jpa.internal.util.LogHelper:HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-10-16 19:55:01,577 INFO  [restartedMain] org.hibernate.Version:HHH000412: Hibernate ORM core version 5.6.11.Final
+2022-10-16 19:55:01,703 INFO  [restartedMain] org.hibernate.annotations.common.Version:HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-10-16 19:55:01,762 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource:HikariPool-1 - Starting...
+2022-10-16 19:55:01,870 INFO  [restartedMain] com.zaxxer.hikari.HikariDataSource:HikariPool-1 - Start completed.
+2022-10-16 19:55:01,883 INFO  [restartedMain] org.hibernate.dialect.Dialect:HHH000400: Using dialect: org.hibernate.dialect.PostgreSQLDialect
+2022-10-16 19:55:02,522 INFO  [restartedMain] org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator:HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-10-16 19:55:02,533 INFO  [restartedMain] org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean:Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-10-16 19:55:02,830 WARN  [restartedMain] org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration:spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-10-16 19:55:03,297 INFO  [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain:Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2bd32cc4, org.springframework.security.web.context.SecurityContextPersistenceFilter@42f0d276, org.springframework.security.web.header.HeaderWriterFilter@32b095bf, org.springframework.security.web.authentication.logout.LogoutFilter@63987d64, com.library.security.jwt.AuthTokenFilter@60000cb, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6648c802, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@50885106, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@688e0d48, org.springframework.security.web.session.SessionManagementFilter@1a1eb51a, org.springframework.security.web.access.ExceptionTranslationFilter@5db81a5a, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@2306a655]
+2022-10-16 19:55:03,661 INFO  [restartedMain] org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer:LiveReload server is running on port 35729
+2022-10-16 19:55:03,690 INFO  [restartedMain] org.springframework.boot.web.embedded.tomcat.TomcatWebServer:Tomcat started on port(s): 8080 (http) with context path ''
+2022-10-16 19:55:03,701 INFO  [restartedMain] com.library.CitadelLibraryApplication:Started CitadelLibraryApplication in 3.79 seconds (JVM running for 4.305)
+2022-10-16 19:55:13,425 INFO  [http-nio-8080-exec-2] org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]:Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-10-16 19:55:13,426 INFO  [http-nio-8080-exec-2] org.springframework.web.servlet.DispatcherServlet:Initializing Servlet 'dispatcherServlet'
+2022-10-16 19:55:13,427 INFO  [http-nio-8080-exec-2] org.springframework.web.servlet.DispatcherServlet:Completed initialization in 1 ms
+2022-10-16 19:58:31,822 INFO  [SpringApplicationShutdownHook] org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean:Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-10-16 19:58:31,827 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource:HikariPool-1 - Shutdown initiated...
+2022-10-16 19:58:31,830 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource:HikariPool-1 - Shutdown completed.
