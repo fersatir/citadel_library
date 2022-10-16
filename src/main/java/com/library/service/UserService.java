@@ -135,12 +135,18 @@ public class UserService {
   }
 
 
-    public UserDTO updateUserByAdminOrStaff(Long id, AdminUpdateUserRequest adminUpdateUserRequest) {
+    public UserDTO updateUserByAdminOrStaff(Long id,Long idLogin ,AdminUpdateUserRequest adminUpdateUserRequest) {
 
     boolean emailExist= userRepository.existsByEmail(adminUpdateUserRequest.getEmail());
 
     User user = userRepository.findById(id).orElseThrow(()->
             new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, id)));
+
+   User userLogin = userRepository.findById(idLogin).orElseThrow(()->
+            new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE,idLogin)));
+
+
+
 
 
         Set<String> userStrRoles = adminUpdateUserRequest.getRoles();

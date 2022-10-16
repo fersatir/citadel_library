@@ -84,8 +84,9 @@ public class UserController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
-    public ResponseEntity<UserDTO>  updateUserByAdminOrStaff(@PathVariable Long id, @Valid @RequestBody AdminUpdateUserRequest adminUpdateUserRequest){
-       UserDTO userDTO =  userService.updateUserByAdminOrStaff(id,adminUpdateUserRequest);
+    public ResponseEntity<UserDTO>  updateUserByAdminOrStaff(HttpServletRequest request,@PathVariable Long id, @Valid @RequestBody AdminUpdateUserRequest adminUpdateUserRequest){
+      Long idLogin = (Long) request.getAttribute("id");
+       UserDTO userDTO =  userService.updateUserByAdminOrStaff(id,idLogin,adminUpdateUserRequest);
 
        return ResponseEntity.ok(userDTO);
     }
