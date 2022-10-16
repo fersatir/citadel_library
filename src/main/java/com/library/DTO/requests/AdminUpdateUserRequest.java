@@ -1,11 +1,9 @@
 package com.library.dto.requests;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -13,12 +11,14 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Set;
+
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
+public class AdminUpdateUserRequest {
 
     @NotNull(message="Please provide last name")
     @Size(min=2, max=30,message="Your last name '${validatedValue}' must be between {min} and {max} chars long")
@@ -57,4 +57,8 @@ public class RegisterRequest {
     private LocalDateTime createDate;
 
     private String resetPasswordCode;
+
+    private Boolean builtIn;
+
+    private Set<String> roles;
 }
