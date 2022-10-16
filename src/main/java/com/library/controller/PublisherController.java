@@ -31,8 +31,6 @@ public class PublisherController {
                                                             @RequestParam(required = false,value = "sort", defaultValue = "name") String prop,
                                                             @RequestParam(required = false,value = "direction", defaultValue = "ASC") Direction direction){
 
-
-
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction,prop));
         Page<Publisher> publisherPage = publisherService.getAllPublishersWithPage(pageable);
         return new ResponseEntity<>(publisherPage, HttpStatus.OK);
@@ -49,7 +47,7 @@ public class PublisherController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<Publisher> createPublisher(@Valid @RequestBody Publisher publisher){
-        publisherService.savePublisher(publisher);
+        publisherService.createPublisher(publisher);
         return new ResponseEntity<>(publisher, HttpStatus.CREATED);
     }
 

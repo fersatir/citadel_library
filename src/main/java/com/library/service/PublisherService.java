@@ -22,7 +22,7 @@ public class PublisherService {
     @Autowired
     private BookRepository bookRepository;
 
-    public void savePublisher(Publisher publisher) {
+    public void createPublisher(Publisher publisher) {
         publisherRepository.save(publisher);
     }
 

@@ -29,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeRequests().antMatchers("/login","/register",
-                        "/categories","/categories/","/publishers","/publishers/").permitAll()
+                        "/categories","/categories/","/publishers","/publishers/","/authors","/authors/").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
