@@ -2,29 +2,37 @@ package com.library.service;
 
 import com.library.domain.Author;
 import com.library.domain.Publisher;
+import com.library.exception.ConflictException;
+import com.library.exception.ResourceNotFoundException;
+import com.library.exception.message.ErrorMessage;
+import com.library.repository.BookRepository;
 import com.library.repository.PublisherRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-@AllArgsConstructor
+
 @Service
 public class PublisherService {
 
+    @Autowired
     private PublisherRepository publisherRepository;
+    @Autowired
+    private BookRepository bookRepository;
 
-    public void savePublisher(Publisher publisher){
+    public void savePublisher(Publisher publisher) {
         publisherRepository.save(publisher);
     }
 
     public Page<Publisher> getAllPublishersWithPage(Pageable pageable) {
-      return  publisherRepository.findAllPublishersWithPage(pageable);
+        return publisherRepository.findAllPublishersWithPage(pageable);
     }
 
     public Publisher getPublisherById(Long id) {
-        return publisherRepository.findById(id).orElse(null);
-        //TODO -> Exception
+        return publisherRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(String.format(ErrorMessage.PUBLISHER_NOT_FOUND_MESSAGE, id)));
     }
 
     public Publisher updatePublisherById(Long id, Publisher newPublisher) {
@@ -38,7 +46,12 @@ public class PublisherService {
 
     public Publisher deletePublisherById(Long id) {
         Publisher foundPublisher = getPublisherById(id);
-        publisherRepository.deleteById(id);
+
+        if (bookRepository.existsBookPublisherId(id) != null) {
+            throw new ConflictException(String.format(ErrorMessage.PUBLISHER_NOT_DELETE_MESSAGE, id));
+        } else {
+            publisherRepository.deleteById(id);
+        }
         return foundPublisher;
     }
 }

@@ -23,4 +23,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("SELECT u FROM Book u WHERE u.category.id = ?1")
     Book existsBookCategoryId(Long id);
 
+    @Query("SELECT p FROM Book p WHERE p.publisher.id = ?1")
+    Book existsBookPublisherId(Long id);
+
 }
