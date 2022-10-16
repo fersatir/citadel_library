@@ -5,6 +5,7 @@ import com.library.domain.Book;
 import com.library.domain.Loan;
 import com.library.domain.User;
 import com.library.dto.mapper.LoanMapper;
+import com.library.dto.response.LoanResponse;
 import com.library.exception.BadRequestException;
 import com.library.exception.ResourceNotFoundException;
 import com.library.exception.message.ErrorMessage;
@@ -12,6 +13,8 @@ import com.library.repository.BookRepository;
 import com.library.repository.LoanRepository;
 import com.library.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,7 +48,6 @@ public class LoanService {
         User user= userRepository.findById(loanDTO.getUserId()).orElseThrow(()->
                 new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, loanDTO.getUserId())));
 
-
          List<Loan> expireDates = loanRepository.expireDate(loanDTO.getUserId());
 
            for (Loan l:expireDates) {
@@ -55,9 +57,6 @@ public class LoanService {
                  if(expired)  throw new BadRequestException("kitap alamazsın iade tarihini geciktirdiğin için kitap alamazsın.");
                }
            }
-
-
-
 
         Loan loan = new Loan();
         loan.setUser(user);
@@ -73,8 +72,26 @@ public class LoanService {
        bookRepository.save(book);
 
         return loanDTO;
-
     }
 
 
+    @Transactional
+    public Page<LoanResponse> getAuthenticatedUserLoans(Pageable pageable,Long idLogin) {
+        User user= userRepository.findById(idLogin).orElseThrow(()->
+                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, idLogin)));
+
+        Page<LoanResponse> authUserLoans = loanRepository.getAutUserLoan(idLogin,pageable);
+
+        return authUserLoans;
+    }
+
+    public LoanResponse getAuthenticatedUserLoanWithId(Long idLogin, Long id) {
+        User user= userRepository.findById(idLogin).orElseThrow(()->
+                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, idLogin)));
+        LoanResponse authUserLoan = loanRepository.getAutUserLoanId(idLogin,id);
+
+        if(authUserLoan == null) throw new BadRequestException("Kullanıcıya ait kayıt bulunamamıştır.");
+
+        return authUserLoan;
+    }
 }

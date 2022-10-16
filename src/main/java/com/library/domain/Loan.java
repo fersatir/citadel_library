@@ -40,7 +40,7 @@ public class Loan {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id", nullable = false)
     //@OnDelete(action = OnDeleteAction.CASCADE)
     private Book book;
