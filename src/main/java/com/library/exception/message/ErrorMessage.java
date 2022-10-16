@@ -7,5 +7,9 @@ public class ErrorMessage {
     public final static String EMAIL_ALREADY_EXIST_MESSAGE="Email already exist: %s";
     public final static String ROLE_NOT_FOUND_MESSAGE="Role with name %s not found";
 
+    public final static String CATEGORY_NOT_FOUND_MESSAGE="Category with id %d not found";
+
+    public final static String CATEGORY_NOT_DELETE_MESSAGE="Category has book category id %d ";
+
 
 }
