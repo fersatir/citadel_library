@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
 public interface LoanRepository extends JpaRepository<Loan,Long> {
 
   //  @Query("SELECT u FROM User u WHERE u.id = ?1")
-  //  boolean existsByUserId(User user);
+    boolean existsByUserId(User user);
 }

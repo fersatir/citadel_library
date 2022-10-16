@@ -1,10 +1,19 @@
 package com.library.controller;
 
 
+
 import com.library.dto.UserCreateDTO;
 import com.library.dto.UserDTO;
+import com.library.dto.requests.AdminUpdateUserRequest;
+import com.library.dto.requests.UserUpdateRequest;
+import com.library.dto.response.CLResponse;
+import com.library.service.UpdatePasswordRequest;
 import com.library.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,7 +48,6 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-
     @GetMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF') or hasRole('MEMBER')")
     public ResponseEntity<UserDTO> getUserById(HttpServletRequest request){
@@ -55,6 +63,18 @@ public class UserController {
     return ResponseEntity.ok(userDTO);
     }
 
+    @GetMapping("/page")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
+    public ResponseEntity<Page<UserDTO>> getAllUsersPage(@RequestParam(required = false, value = "page",defaultValue = "0") int page,
+                                                         @RequestParam(required = false, value = "size",defaultValue = "20") int size,
+                                                         @RequestParam(required = false, value = "sort",defaultValue = "createDate") String prop,
+                                                         @RequestParam(required = false, value = "direction",defaultValue = "DESC")Sort.Direction direction){
+
+        Pageable pageable = PageRequest.of(page,size,Sort.by(direction,prop));
+        Page<UserDTO> userDTOPage = userService.getUserPage(pageable);
+        return ResponseEntity.ok(userDTOPage);
+    }
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDTO> deleteUserById(@PathVariable Long id){
@@ -62,4 +82,34 @@ public class UserController {
     return ResponseEntity.ok(userDTO);
     }
 
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
+    public ResponseEntity<UserDTO>  updateUserByAdminOrStaff(@PathVariable Long id, @Valid @RequestBody AdminUpdateUserRequest adminUpdateUserRequest){
+       UserDTO userDTO =  userService.updateUserByAdminOrStaff(id,adminUpdateUserRequest);
+
+       return ResponseEntity.ok(userDTO);
+    }
+
+    @PatchMapping
+    @PreAuthorize("hasRole('MEMBER')")
+    public ResponseEntity<UserDTO> updateUser(HttpServletRequest request, @Valid @RequestBody UserUpdateRequest userUpdateRequest){
+      Long id = (Long) request.getAttribute("id");
+      UserDTO userDTO = userService.updateUser(id,userUpdateRequest);
+        return ResponseEntity.ok(userDTO);
+    }
+
+    @PutMapping("/auth")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF') or hasRole('MEMBER')")
+    public ResponseEntity<CLResponse> updatePassword (HttpServletRequest request, @RequestBody UpdatePasswordRequest passwordRequest){
+      Long id = (Long) request.getAttribute("id");
+      userService.updatePassword(id,passwordRequest);
+
+      CLResponse response = new CLResponse();
+      response.setMessage("Password has changed");
+      response.setSuccess(true);
+
+      return ResponseEntity.ok(response);
+
+
+    }
 }

@@ -20,6 +20,8 @@ import java.util.Date;
 @NoArgsConstructor
 public class RegisterRequest {
 
+    @NotNull(message="Please provide last name")
+    @Size(min=2, max=30,message="Your last name '${validatedValue}' must be between {min} and {max} chars long")
     private String firstName;
 
     @NotNull(message="Please provide last name")
