@@ -3,6 +3,9 @@ package com.library.repository;
 
 import com.library.domain.Loan;
 import com.library.domain.User;
+import com.library.dto.response.LoanResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -20,5 +23,9 @@ public interface LoanRepository extends JpaRepository<Loan,Long> {
     @Query("SELECT u FROM Loan u WHERE u.user.id = ?1")
     List<Loan> expireDate(Long id);
 
+  @Query("SELECT new com.library.dto.response.LoanResponse(u) FROM Loan u WHERE u.user.id = ?1")
+  Page<LoanResponse> getAutUserLoan(Long id, Pageable pageable);
 
+  @Query("SELECT new com.library.dto.response.LoanResponse(u) FROM Loan u WHERE u.user.id = ?1 and u.id = ?2")
+  LoanResponse getAutUserLoanId(Long idLogin, Long id);
 }
