@@ -18,7 +18,9 @@ spring:
     driver-class-name: org.postgresql.Driver
 
 
-
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
 
   jpa:
     show-sql: true
