@@ -86,7 +86,7 @@ public class UserController {
                                                                     HttpServletRequest request){
         Long id =(Long)request.getAttribute("id");
         Pageable pageable = PageRequest.of(page,size,Sort.by(direction,prop));
-        Page<UserLoansResponse> userLoansPage = userService.getUserLoans(pageable,id);
+        Page<UserLoansResponse> userLoansPage = userService.getUserLoans(id,pageable);
         return ResponseEntity.ok(userLoansPage);
 
 

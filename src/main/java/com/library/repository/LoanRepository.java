@@ -35,5 +35,5 @@ public interface LoanRepository extends JpaRepository<Loan,Long> {
   LoanResponseBookUser getAnyUserLoanByEmployeAnyAdmin(Long id);
 
     @Query("SELECT new com.library.dto.response.UserLoansResponse(u) FROM Loan u WHERE u.user.id = ?1")
-    Page<UserLoansResponse> getAuthUserLoans(Pageable pageable, Long id);
+    Page<UserLoansResponse> getAuthUserLoans(Long id,Pageable pageable);
 }

@@ -258,12 +258,12 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public Page<UserLoansResponse> getUserLoans(Pageable pageable,Long id) {
+    public Page<UserLoansResponse> getUserLoans(Long id,Pageable pageable) {
 
         User user = userRepository.findById(id).orElseThrow(()->
                 new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE,id)));
 
-        Page<UserLoansResponse> authUserLoans = loanRepository.getAuthUserLoans(pageable,id);
+        Page<UserLoansResponse> authUserLoans = loanRepository.getAuthUserLoans(id,pageable);
 
         if (authUserLoans.isEmpty()){
             throw new ResourceNotFoundException(String.format(ErrorMessage.LOAN_NOT_FOUND_MESSAGE,id));
