@@ -7,6 +7,7 @@ import com.library.dto.UserDTO;
 import com.library.dto.requests.AdminUpdateUserRequest;
 import com.library.dto.requests.UserUpdateRequest;
 import com.library.dto.response.CLResponse;
+import com.library.dto.response.UserLoansResponse;
 import com.library.service.UpdatePasswordRequest;
 import com.library.service.UserService;
 import lombok.AllArgsConstructor;
@@ -75,6 +76,23 @@ public class UserController {
         return ResponseEntity.ok(userDTOPage);
     }
 
+
+    @GetMapping("/loans")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF') or hasRole('MEMBER')")
+    public ResponseEntity<Page<UserLoansResponse>> getUserLoansPage(@RequestParam(required = false, value = "page",defaultValue = "0") int page,
+                                                                    @RequestParam(required = false, value = "size",defaultValue = "20") int size,
+                                                                    @RequestParam(required = false, value = "sort",defaultValue = "id") String prop,
+                                                                    @RequestParam(required = false, value = "direction",defaultValue = "DESC")Sort.Direction direction,
+                                                                    HttpServletRequest request){
+        Long id =(Long)request.getAttribute("id");
+        Pageable pageable = PageRequest.of(page,size,Sort.by(direction,prop));
+        Page<UserLoansResponse> userLoansPage = userService.getUserLoans(pageable,id);
+        return ResponseEntity.ok(userLoansPage);
+
+
+    }
+
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDTO> deleteUserById(@PathVariable Long id){
@@ -110,7 +128,5 @@ public class UserController {
       response.setSuccess(true);
 
       return ResponseEntity.ok(response);
-        // .
-
     }
 }
