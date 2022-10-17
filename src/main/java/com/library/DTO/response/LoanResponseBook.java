@@ -14,6 +14,9 @@ public class LoanResponseBook {
 
     private Long id;
 
+    private Long userId;
+
+    private Long bookId;
     private LocalDateTime loanDate;
 
     private LocalDateTime expireDate;
@@ -22,12 +25,13 @@ public class LoanResponseBook {
 
     private User user;
 
-
     public LoanResponseBook(Loan loan) {
         this.id = loan.getId();
         this.loanDate = loan.getLoanDate();
         this.expireDate = loan.getExpireDate();
         this.returnDate = loan.getReturnDate();
+        this.userId = loan.getUser().getId();
+        this.bookId = loan.getBook().getId();
         this.user = loan.getUser();
     }
 }

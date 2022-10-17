@@ -52,13 +52,7 @@ public class LoanService {
 
          List<Loan> expireDates = loanRepository.expireDate(loanDTO.getUserId());
 
-           for (Loan l:expireDates) {
-               if(l.getReturnDate() == null){
-                 Boolean expired =  l.getExpireDate().isBefore(ld);
-                   System.out.println(expired);
-                 if(expired)  throw new BadRequestException("kitap alamazsın iade tarihini geciktirdiğin için kitap alamazsın.");
-               }
-           }
+         expireLoanCalculate(expireDates,ld);
 
         Loan loan = new Loan();
         loan.setUser(user);
@@ -83,6 +77,7 @@ public class LoanService {
                 new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, idLogin)));
 
         Page<LoanResponse> authUserLoans = loanRepository.getAutUserLoan(idLogin,pageable);
+
         if(authUserLoans.isEmpty()) throw new BadRequestException("Kullanıcıya ait kayıt bulunamamıştır.");
 
         return authUserLoans;
@@ -118,10 +113,26 @@ public class LoanService {
         return authUserLoans;
     }
 
-    public Loan getloanBookAndUser(Long id) {
-        Loan loan = loanRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException
-                (String.format(ErrorMessage.LOAN_NOT_FOUND_MESSAGE, id)));
+    public LoanResponseBookUser getloanBookAndUser(Long id) {
+        LoanResponseBookUser loan = loanRepository.getAnyUserLoanByEmployeAnyAdmin(id);
 
+        if(loan == null) throw new BadRequestException("Kayıt bulunamamıştır");
         return loan;
     }
+
+    // Kullanıcının kitap alıp alamayacağını kontrol eden method
+    public void expireLoanCalculate(List<Loan> expireDates, LocalDateTime ld){
+       int sayac = 0;//3 den fazla kitap alma isteğini tutuyor.
+        for (Loan l:expireDates) {
+            if(l.getReturnDate() == null){
+                sayac++;
+                Boolean expired =  l.getExpireDate().isBefore(ld);
+                System.out.println(expired);
+                if(expired)  {
+                    throw new BadRequestException("Aldığınız kitabın iade tarihi geciktiği için kitap alamazsın.");
+                }else if( sayac>=3) throw new BadRequestException("Aynı anda en fazla 3 kitap alabilirsin.");
+            }
+        }
+    }
+
 }
