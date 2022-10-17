@@ -1,6 +1,9 @@
 package com.library.repository;
 
 import com.library.domain.User;
+import com.library.dto.response.UserLoansResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -19,6 +22,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
     Optional<User> findById(Long userId);
 
     Boolean existsByEmail(String email);
+
 
    /* @Modifying
     @Query("UPDATE User u SET u.firstName=:firstName, u.lastName=:lastName, u.phone=:phone, u.email=:email," +
