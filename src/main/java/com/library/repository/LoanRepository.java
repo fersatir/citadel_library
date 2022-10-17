@@ -5,6 +5,7 @@ import com.library.domain.Loan;
 import com.library.domain.User;
 import com.library.dto.response.LoanResponse;
 import com.library.dto.response.LoanResponseBook;
+import com.library.dto.response.LoanResponseBookUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -31,4 +32,7 @@ public interface LoanRepository extends JpaRepository<Loan,Long> {
 
   @Query("SELECT new com.library.dto.response.LoanResponseBook(u) FROM Loan u WHERE u.book.id = ?1")
   Page<LoanResponseBook> getSpecifiedBookLoan(Long id, Pageable pageable);
+
+  @Query("SELECT new com.library.dto.response.LoanResponseBookUser(u) FROM Loan u WHERE u.id = ?1")
+  LoanResponseBookUser getAnyUserLoanByEmployeAnyAdmin(Long id);
 }
