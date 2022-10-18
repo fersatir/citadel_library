@@ -1,5 +1,6 @@
 package com.library.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -57,10 +58,11 @@ public class User {
     @Email(message = "Please provide valid email")
     @NotNull(message="Please provide email")
     @Size(min=10, max=80,message="Email '${validatedValue}' must be between {min} and {max} chars long")
-    @Column(length = 80,nullable = false)
+    @Column(length = 80,nullable = false,unique = true)
     private String email;
 
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotNull(message="Please provide password")
     @Column(nullable = false)
     private String password;
@@ -69,6 +71,7 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime createDate;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String resetPasswordCode;
 
     @NotNull(message="Please provide user builtIn")
@@ -80,6 +83,7 @@ public class User {
             joinColumns = @JoinColumn(name="user_id"),
             inverseJoinColumns=@JoinColumn(name="role_id"))
     private Set<Role> roles = new HashSet<>();
+
 
     public User(String firstName, String lastName, Integer score, String address, String phone, Date birthDate, String email, String password, LocalDateTime createDate, String resetPasswordCode, Boolean builtIn, Set<Role> roles) {
         this.firstName = firstName;
