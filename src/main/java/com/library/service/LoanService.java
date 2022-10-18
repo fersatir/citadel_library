@@ -56,7 +56,7 @@ public class LoanService {
          List<Loan> expireDates = loanRepository.expireDate(loanDTO.getUserId());
 
         //loan isteğinde bulunan kullanıcının aldığı kitaplardan expire tarihlerini alıyoruz calculateUserIsLoanable methodunda getirmediği kitap olup olmadığı kontrol ediliyor.
-         calculateUserIsLoanable(expireDates,ld,user.getScore());
+         calculateUserIsLoanable(expireDates,user.getScore());
 
         Loan loan = new Loan();
         loan.setUser(user);
@@ -80,20 +80,21 @@ public class LoanService {
 
         if(score>=2){
             day = 20;
-        }else if(score>0){
-            day = 10;
-        }else if(score<0){
-            day= 6;
-        }else if (score<-2){
-            day = 3;
+        }else if(score==1){
+            day = 15;
         }else if(score==0){
-            day = 10;
+            day= 10;
+        }else if (score==-1){
+            day = 6;
+        }else if(score<=-2){
+            day = 3;
         }
         return day;
     }
 
     // Kullanıcının aldığı kitabı getirmeme durumuna (expiredate) göre kitap alıp alamayacağını kontrol eden method
-    public void calculateUserIsLoanable(List<Loan> expireDates, LocalDateTime ld, int score){
+    public void calculateUserIsLoanable(List<Loan> expireDates, int score){
+        LocalDateTime ld = LocalDateTime.now();
         int maxBookLoan = userHowMuchBookGet(score);
         int sayac = 0;
         for (Loan l:expireDates) {
@@ -115,15 +116,16 @@ public class LoanService {
 
         if(score>=2){
             book = 5;
-        }else if(score>0){
+        }else if(score==1){
             book = 4;
-        }else if(score<0){
-            book= 2;
-        }else if (score<-2){
-            book = 1;
         }else if(score==0){
-            book = 3;
+            book= 3;
+        }else if (score==-1){
+            book = 2;
+        }else if(score<=-2){
+            book = 1;
         }
+
         return book;
     }
 
