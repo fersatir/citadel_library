@@ -3,6 +3,7 @@ package com.library.repository;
 
 import com.library.domain.Loan;
 import com.library.domain.User;
+import com.library.dto.ReportMostPopularBookDTO;
 import com.library.dto.response.LoanResponse;
 import com.library.dto.response.LoanResponseBook;
 
@@ -36,4 +37,7 @@ public interface LoanRepository extends JpaRepository<Loan,Long> {
 
     @Query("SELECT new com.library.dto.response.UserLoansResponse(u) FROM Loan u WHERE u.user.id = ?1")
     Page<UserLoansResponse> getAuthUserLoans(Long id,Pageable pageable);
+
+    @Query("SELECT new com.library.dto.ReportMostPopularBookDTO(max(l.book.id), max(l.book.name), max(l.book.isbn), max(l.book.pageCount), count(l.book.id)) from Loan l group by l.book.id")
+  List<ReportMostPopularBookDTO> mostPopulars();
 }

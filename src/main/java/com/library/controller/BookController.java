@@ -34,12 +34,12 @@ public class BookController {
                                                         @RequestParam("cat") Optional<Long> categortyId,
                                                         @RequestParam("author") Optional<Long> authorId,
                                                         @RequestParam("publisher") Optional<Long> publisherId,
-                                                        @RequestParam("page") int page,
-                                                        @RequestParam("size") int size,
-                                                        @RequestParam("sort") String name,
-                                                        @RequestParam("type") Sort.Direction direction){
+                                                        @RequestParam( required = false,value ="page", defaultValue = "0") int page,
+                                                        @RequestParam( required = false,value ="size", defaultValue = "10") int size,
+                                                        @RequestParam( required = false,value ="sort", defaultValue = "name") String prop,
+                                                        @RequestParam( required = false,value ="type", defaultValue = "DESC") Sort.Direction direction){
 
-        Pageable pageable = PageRequest.of(page,size,Sort.by(direction,name));
+        Pageable pageable = PageRequest.of(page,size,Sort.by(direction,prop));
 
         Page<BookDTO> bookPage = bookService.findAllWithPage(p, categortyId, authorId, publisherId,pageable);
 

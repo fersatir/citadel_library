@@ -1,8 +1,9 @@
 package com.library.controller;
 
-import com.library.dto.response.ReportMostPopularBookDTO;
-import com.library.dto.response.ReportStatisticDTO;
+import com.library.dto.ReportMostPopularBookDTO;
+import com.library.dto.ReportStatisticDTO;
 import com.library.service.ReportService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,11 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/report")
+@AllArgsConstructor
 public class ReportController {
-
-    @Autowired
     private ReportService reportService;
 
     // Tüm istatistiki Genel Verileri Getirir
@@ -34,17 +36,14 @@ public class ReportController {
 
     //Most popular Books
     @GetMapping()
-    public ResponseEntity<Page<ReportMostPopularBookDTO>> getMostPopularBooksWithPage(
-            @RequestParam(required = false,value = "page", defaultValue = "0") int page,
-            @RequestParam(required = false,value = "size", defaultValue = "20") int size,
-            @RequestParam(required = false,value = "sort", defaultValue = "amount") String prop,
-            @RequestParam(required = false,value = "direction", defaultValue = "DESC") Sort.Direction direction){
+    public ResponseEntity<List<ReportMostPopularBookDTO>> getMostPopularBooksWithPage(
+           ){
 
-        Pageable pageable = PageRequest.of(page,size,Sort.by(direction,prop));
-        Page<ReportMostPopularBookDTO> mostPopularBook = reportService.getMostPopularBooksWithPage(pageable);
+        List<ReportMostPopularBookDTO> mostPopularBook = reportService.getMostPopularBooksWithPage();
 
         return ResponseEntity.ok(mostPopularBook);
     }
+
 
 
 
