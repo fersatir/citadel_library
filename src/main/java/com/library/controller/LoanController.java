@@ -29,7 +29,6 @@ public class LoanController {
 
     private LoanService loanService;
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     @PostMapping("/add")
     public ResponseEntity<LoanDTO> createLoan(@Valid @RequestBody LoanDTO loanDTO){
 

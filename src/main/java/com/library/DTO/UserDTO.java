@@ -1,5 +1,6 @@
 package com.library.dto;
 
+import com.library.domain.Loan;
 import com.library.domain.Role;
 import com.library.domain.enums.RoleType;
 import lombok.AllArgsConstructor;
@@ -39,5 +40,15 @@ public class UserDTO {
             else  {rolesStr.add("Member");}
         });
         this.roles=rolesStr;
+    }
+
+    public UserDTO(Long id, String firstName, String lastName, Integer score, String phone,
+                   String email) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.score = score;
+        this.phone = phone;
+        this.email = email;
     }
 }
