@@ -5,9 +5,11 @@ import com.library.domain.Book;
 import com.library.domain.Loan;
 import com.library.domain.User;
 import com.library.dto.mapper.LoanMapper;
+import com.library.dto.requests.LoanUpdateRequest;
 import com.library.dto.response.LoanResponse;
 import com.library.dto.response.LoanResponseBook;
 import com.library.dto.response.LoanResponseBookUser;
+import com.library.dto.response.LoanUpdateResponse;
 import com.library.exception.BadRequestException;
 import com.library.exception.ResourceNotFoundException;
 import com.library.exception.message.ErrorMessage;
@@ -50,20 +52,16 @@ public class LoanService {
         User user= userRepository.findById(loanDTO.getUserId()).orElseThrow(()->
                 new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, loanDTO.getUserId())));
 
+        //Kullanıcının aldığı kitapların expireDate tarihlerini alıyoruz.
          List<Loan> expireDates = loanRepository.expireDate(loanDTO.getUserId());
 
-           for (Loan l:expireDates) {
-               if(l.getReturnDate() == null){
-                 Boolean expired =  l.getExpireDate().isBefore(ld);
-                   System.out.println(expired);
-                 if(expired)  throw new BadRequestException("kitap alamazsın iade tarihini geciktirdiğin için kitap alamazsın.");
-               }
-           }
+        //loan isteğinde bulunan kullanıcının aldığı kitaplardan expire tarihlerini alıyoruz calculateUserIsLoanable methodunda getirmediği kitap olup olmadığı kontrol ediliyor.
+         calculateUserIsLoanable(expireDates,user.getScore());
 
         Loan loan = new Loan();
         loan.setUser(user);
         loan.setBook(book);
-        loan.setExpireDate(ld.plusDays(7));
+        loan.setExpireDate(ld.plusDays(calculateDay(user.getScore())));
         loan.setLoanDate(ld);
 
        loanRepository.save(loan);
@@ -76,6 +74,61 @@ public class LoanService {
         return loanDTO;
     }
 
+    // kullanıcının score puanına göre kitabın kullanıcıda kalma süresini hesaplama methodu
+    private int calculateDay(int score) {
+        int day=0;
+
+        if(score>=2){
+            day = 20;
+        }else if(score==1){
+            day = 15;
+        }else if(score==0){
+            day= 10;
+        }else if (score==-1){
+            day = 6;
+        }else if(score<=-2){
+            day = 3;
+        }
+        return day;
+    }
+
+    // Kullanıcının aldığı kitabı getirmeme durumuna (expiredate) göre kitap alıp alamayacağını kontrol eden method
+    public void calculateUserIsLoanable(List<Loan> expireDates, int score){
+        LocalDateTime ld = LocalDateTime.now();
+        int maxBookLoan = userHowMuchBookGet(score);
+        int sayac = 0;
+        for (Loan l:expireDates) {
+            if(l.getReturnDate() == null){
+                sayac++;
+                Boolean expired =  l.getExpireDate().isBefore(ld);
+                if(expired){
+                    throw new BadRequestException("Aldığınız kitabın iade tarihi geciktiği için kitap alamazsın.");
+                }else if(sayac>=maxBookLoan){
+                    throw new BadRequestException("Kitap alma kotanızı doldurdunuz, Yeni kitap almak için elinizdekilerden iade etmelisiniz. ");
+                }
+            }
+        }
+    }
+
+    //Kullanıcının kaç kitap alabileceğini kontrol eden method
+    public int userHowMuchBookGet(int score){
+        int book = 0;
+
+        if(score>=2){
+            book = 5;
+        }else if(score==1){
+            book = 4;
+        }else if(score==0){
+            book= 3;
+        }else if (score==-1){
+            book = 2;
+        }else if(score<=-2){
+            book = 1;
+        }
+
+        return book;
+    }
+
 
     @Transactional
     public Page<LoanResponse> getAuthenticatedUserLoans(Pageable pageable,Long idLogin) {
@@ -83,10 +136,13 @@ public class LoanService {
                 new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, idLogin)));
 
         Page<LoanResponse> authUserLoans = loanRepository.getAutUserLoan(idLogin,pageable);
+
         if(authUserLoans.isEmpty()) throw new BadRequestException("Kullanıcıya ait kayıt bulunamamıştır.");
 
         return authUserLoans;
     }
+
+
 
     public LoanResponse getAuthenticatedUserLoanWithId(Long idLogin, Long id) {
         User user= userRepository.findById(idLogin).orElseThrow(()->
@@ -97,6 +153,8 @@ public class LoanService {
 
         return authUserLoan;
     }
+
+
 
     public Page<LoanResponse> getLoansSpecifiedUserById(Pageable pageable, Long id) {
         User user= userRepository.findById(id).orElseThrow(()->
@@ -118,10 +176,50 @@ public class LoanService {
         return authUserLoans;
     }
 
-    public Loan getloanBookAndUser(Long id) {
+    public LoanResponseBookUser getloanBookAndUser(Long id) {
+        LoanResponseBookUser loan = loanRepository.getAnyUserLoanByEmployeAnyAdmin(id);
+
+        if(loan == null) throw new BadRequestException("Kayıt bulunamamıştır");
+        return loan;
+    }
+
+
+
+    public LoanUpdateResponse updateLoan(Long id, LoanUpdateRequest loanUpdateRequest) {
+
         Loan loan = loanRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException
                 (String.format(ErrorMessage.LOAN_NOT_FOUND_MESSAGE, id)));
 
-        return loan;
+        Book book = bookRepository.findById(loan.getBook().getId()).orElseThrow(() -> new ResourceNotFoundException
+                (String.format(ErrorMessage.BOOK_NOT_FOUND_MESSAGE, id)));
+
+        User user= userRepository.findById(loan.getUser().getId()).orElseThrow(()->
+                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, id)));
+
+        loan.setNotes(loanUpdateRequest.getNotes());
+        loan.setExpireDate(loanUpdateRequest.getExpireDate());
+        loan.setReturnDate(loanUpdateRequest.getReturnDate());
+        loanRepository.save(loan);
+
+        book.setLoanable(true);
+        bookRepository.save(book);
+
+        if(loan.getExpireDate().isBefore(loan.getReturnDate())){
+            user.setScore(user.getScore()-1);
+        }else user.setScore(user.getScore()+1);
+
+        userRepository.save(user);
+
+        LoanUpdateResponse loanUpdateResponse = new LoanUpdateResponse();
+        loanUpdateResponse.setId(loan.getId());
+        loanUpdateResponse.setBookId(loan.getBook().getId());
+        loanUpdateResponse.setExpireDate(loan.getExpireDate());
+        loanUpdateResponse.setLoanDate(loan.getLoanDate());
+        loanUpdateResponse.setUserId(loan.getUser().getId());
+        loanUpdateResponse.setNotes(loan.getNotes());
+        loanUpdateResponse.setReturnDate(loan.getReturnDate());
+
+
+        return loanUpdateResponse;
     }
 }
