@@ -1,15 +1,17 @@
 package com.library.service;
 
 import com.library.domain.*;
-import com.library.dto.ReportMostPopularBookDTO;
-import com.library.dto.ReportStatisticDTO;
+import com.library.dto.*;
+import com.library.dto.mapper.BookMapper;
+import com.library.exception.BadRequestException;
 import com.library.repository.*;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Query;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -21,6 +23,8 @@ public class ReportService {
     PublisherRepository publisherRepository;
     CategoryRepository categoryRepository;
     LoanRepository loanRepository;
+
+    BookMapper bookMapper;
 
     //TODO Eksik kısımlar tamamlanacak ReportStatisticDTO referans alınacak
     public ReportStatisticDTO getAllStatistic() {
@@ -43,13 +47,64 @@ public class ReportService {
     }
 
     @Transactional
-    public List<ReportMostPopularBookDTO> getMostPopularBooksWithPage() {
+    public Page<ReportMostPopularBookDTO> getMostPopularBooksWithPage(Pageable pageable) {
 
-       List<ReportMostPopularBookDTO> allLoans = loanRepository.mostPopulars();
+       Page<ReportMostPopularBookDTO> mostPopulars = loanRepository.mostPopulars(pageable);
 
-        return allLoans;
+        return mostPopulars;
+    }
+
+    public Page<BookDTO> getExpiredBooksWithPage(Pageable pageable, LocalDateTime time) {
+
+        Page<BookDTO> bookDTOs = loanRepository.expiredBooks(pageable,time);
+
+        return bookDTOs;
+    }
+
+    public Page<BookDTO> getUnreturnedBooksWithPage(Pageable pageable, LocalDateTime time) {
+
+        Page<BookDTO> bookDTOs = loanRepository.unreturned(pageable,time);
+
+        return bookDTOs;
+    }
+
+
+    public Page<ReportMostBorrowersDTO> getMostBorrowersWithPage(Pageable pageable) {
+
+        Page<ReportMostBorrowersDTO> mostBorrowers = loanRepository.mostBorrowers(pageable);
+
+        return mostBorrowers;
     }
 
 
 
+    /*
+
+    unreturned için alternatif çözüm
+     List<Loan> loans = loanRepository.findAll();
+        List<Loan> unreturnedList = new ArrayList<>();
+        List<BookDTO> unreturnedBookList = new ArrayList<>();
+
+        for (Loan each: loans) {
+            if (each.getExpireDate().isBefore(LocalDateTime.now()) && each.getReturnDate() == null){
+                unreturnedList.add(each);
+            }
+        }
+
+        if(unreturnedList.isEmpty()){
+            throw new BadRequestException("tüm kitaplar geri verilmiştir.");
+        }
+
+        for (Loan each: unreturnedList) {
+            Book book = each.getBook();
+            BookDTO bookDTO = bookMapper.bookToBookDTO(book);
+            bookDTO.setCategory_id(book.getCategory().getId());
+            bookDTO.setAuthor_id(book.getAuthor().getId());
+            bookDTO.setPublisher_id(book.getPublisher().getId());
+
+            unreturnedBookList.add(bookDTO);
+        }
+
+        return unreturnedBookList;
+     */
 }
