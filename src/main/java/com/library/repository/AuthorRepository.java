@@ -9,6 +9,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AuthorRepository extends JpaRepository<Author,Long> {
-    @Query(value = "SELECT p  FROM Author p")
-    Page<Author> findAllPublishersWithPage(Pageable pageable);
+
 }

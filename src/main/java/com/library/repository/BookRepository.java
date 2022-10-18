@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -23,10 +24,10 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("SELECT u FROM Book u WHERE u.category.id = ?1")
     Book existsBookCategoryId(Long id);
 
-    @Query("SELECT p FROM Book p WHERE p.publisher.id = ?1")
-    Book existsBookPublisherId(Long id);
+    @Query("SELECT b FROM Book b WHERE b.publisher.id = ?1 GROUP BY b.publisher.id")
+    List<Book> existsBookPublisherId(Long id);
 
-    @Query("SELECT a FROM Book a WHERE a.author.id = ?1")
+    @Query("SELECT b FROM Book b WHERE b.author.id = ?1")
     Book existsBookAuthorId(Long id);
 
 }
