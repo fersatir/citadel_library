@@ -7,6 +7,7 @@ public class ErrorMessage {
     public final static String EMAIL_ALREADY_EXIST_MESSAGE="Email already exist: %s";
     public final static String ROLE_NOT_FOUND_MESSAGE="Role with name %s not found";
     public final static String BOOK_NOT_FOUND_MESSAGE="Book with id %d not found";
+    public final static String ACTIVE_BOOK_NOT_FOUND_MESSAGE="Active book with id %d not found";
     public final static String BOOK_NOT_AVAILABLE_TO_REMOVE_MESSAGE="Book with id %d not available to remove";
     public final static String INVALID_BOOK_PARAMETER_MESSAGE="Please write valid parameter";
     public final static String LOAN_NOT_FOUND_MESSAGE="Loan with id %d not found";

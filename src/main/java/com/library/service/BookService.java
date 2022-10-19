@@ -34,6 +34,10 @@ public class BookService {
         Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException
                 (String.format(ErrorMessage.BOOK_NOT_FOUND_MESSAGE, id)));
 
+        if (!book.getActive()){
+            throw new ResourceNotFoundException(String.format(ErrorMessage.ACTIVE_BOOK_NOT_FOUND_MESSAGE, id));
+        }
+
         BookDTO bookDTO = bookMapper.bookToBookDTO(book);
 
         return bookDTO;
@@ -78,8 +82,8 @@ public class BookService {
         if (!book.getLoanable() && book.getBuiltIn()) {
             throw new BadRequestException(String.format(ErrorMessage.BOOK_NOT_AVAILABLE_TO_REMOVE_MESSAGE, id));
         }
-
-        bookRepository.delete(book);
+        book.setActive(false);
+        bookRepository.save(book);
         BookDTO bookDTO = bookMapper.bookToBookDTO(book);
 
         return bookDTO;
