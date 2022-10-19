@@ -1,18 +1,16 @@
 package com.library.service;
 
-import com.library.domain.Author;
 import com.library.domain.Publisher;
+import com.library.exception.BadRequestException;
 import com.library.exception.ConflictException;
 import com.library.exception.ResourceNotFoundException;
 import com.library.exception.message.ErrorMessage;
 import com.library.repository.BookRepository;
 import com.library.repository.PublisherRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 
 @Service
 public class PublisherService {
@@ -37,21 +35,26 @@ public class PublisherService {
 
     public Publisher updatePublisherById(Long id, Publisher newPublisher) {
         Publisher foundPublisher = getPublisherById(id);
-        foundPublisher.setName(newPublisher.getName());
-        foundPublisher.setBuiltIn(newPublisher.getBuiltIn());
-
-        publisherRepository.save(foundPublisher);
+        if (foundPublisher.getBuiltIn()){
+            throw new BadRequestException(String.format(ErrorMessage.PUBLISHER_BUILTIN_TRUE_UPDATE_MESSAGE,id));
+        }else {
+            foundPublisher.setName(newPublisher.getName());
+            foundPublisher.setBuiltIn(newPublisher.getBuiltIn());
+            publisherRepository.save(foundPublisher);
+        }
         return foundPublisher;
     }
 
     public Publisher deletePublisherById(Long id) {
         Publisher foundPublisher = getPublisherById(id);
 
-        if (bookRepository.existsBookPublisherId(id) != null) {
+        if (foundPublisher.getBuiltIn()){
+            throw new BadRequestException(String.format(ErrorMessage.PUBLISHER_BUILTIN_TRUE_DELETE_MESSAGE,id));
+        } else if (!bookRepository.existsBookPublisherId(id).isEmpty()) {
             throw new ConflictException(String.format(ErrorMessage.PUBLISHER_NOT_DELETE_MESSAGE, id));
-        } else {
-            publisherRepository.deleteById(id);
         }
+
+        publisherRepository.deleteById(id);
         return foundPublisher;
     }
 }
