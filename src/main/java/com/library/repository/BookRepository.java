@@ -24,10 +24,10 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("SELECT u FROM Book u WHERE u.category.id = ?1")
     List<Book> returnBooks(Long id);
 
-    @Query("SELECT p FROM Book p WHERE p.publisher.id = ?1")
-    Book existsBookPublisherId(Long id);
+    @Query("SELECT b FROM Book b WHERE b.publisher.id = ?1")
+    List<Book> existsBookPublisherId(Long id);
 
-    @Query("SELECT a FROM Book a WHERE a.author.id = ?1")
-    Book existsBookAuthorId(Long id);
+    @Query("SELECT b FROM Book b WHERE b.author.id = ?1")
+    List<Book> existsBookAuthorId(Long id);
 
 }

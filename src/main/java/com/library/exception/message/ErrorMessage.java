@@ -21,9 +21,15 @@ public class ErrorMessage {
     /* PUBLISHER EXCEPTION MESSAGES */
     public final static String PUBLISHER_NOT_FOUND_MESSAGE="Publisher with id %d not found";
     public final static String PUBLISHER_NOT_DELETE_MESSAGE="Publisher has book publisher id %d";
+    public final static String PUBLISHER_BUILTIN_TRUE_DELETE_MESSAGE="Could not delete %d id Publisher because of builtIn is true";
+    public final static String PUBLISHER_BUILTIN_TRUE_UPDATE_MESSAGE="Could not update %d id Publisher because of builtIn is true";
+
 
     /* AUTHOR EXCEPTION MESSAGES */
     public final static String AUTHOR_NOT_FOUND_MESSAGE="Author with id %d not found";
     public final static String AUTHOR_NOT_DELETE_MESSAGE="Author has book Author id %d";
+    public final static String AUTHOR_BUILTIN_TRUE_DELETE_MESSAGE="Could not delete %d id Author because of builtIn is true";
+    public final static String AUTHOR_BUILTIN_TRUE_UPDATE_MESSAGE="Could not update %d id Author because of builtIn is true";
+
 
 }
