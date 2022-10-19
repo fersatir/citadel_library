@@ -27,7 +27,7 @@ public interface LoanRepository extends JpaRepository<Loan,Long> {
 
 
     @Query("SELECT u FROM Loan u WHERE u.user.id = ?1")
-    List<Loan> expireDate(Long id);
+    List<Loan> getUserLoans(Long id);
 
   @Query("SELECT new com.library.dto.response.LoanResponse(u) FROM Loan u WHERE u.user.id = ?1")
   Page<LoanResponse> getAutUserLoan(Long id, Pageable pageable);
