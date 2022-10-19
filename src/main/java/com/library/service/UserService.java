@@ -123,7 +123,7 @@ public class UserService {
     public UserDTO removeById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, id)));
-       List<Loan> loans = loanRepository.expireDate(id);
+       List<Loan> loans = loanRepository.getUserLoans(id);
 
         for (Loan each : loans) {
             if (each.equals(null)){

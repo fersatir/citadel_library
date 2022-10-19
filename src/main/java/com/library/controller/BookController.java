@@ -29,7 +29,7 @@ public class BookController {
         return new ResponseEntity<>(book,HttpStatus.OK);
     }
 
-    @GetMapping("/pages")
+    @GetMapping()
     public ResponseEntity<Page<BookDTO>> getAllWithPage(@RequestParam("name") Optional<String> p,
                                                         @RequestParam("cat") Optional<Long> categortyId,
                                                         @RequestParam("author") Optional<Long> authorId,

@@ -1,18 +1,12 @@
 package com.library.service;
 
-import com.library.domain.*;
 import com.library.dto.*;
-import com.library.dto.mapper.BookMapper;
-import com.library.exception.BadRequestException;
 import com.library.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.Query;
 import java.time.LocalDateTime;
-import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -24,9 +18,6 @@ public class ReportService {
     CategoryRepository categoryRepository;
     LoanRepository loanRepository;
 
-    BookMapper bookMapper;
-
-    //TODO Eksik kısımlar tamamlanacak ReportStatisticDTO referans alınacak
     public ReportStatisticDTO getAllStatistic() {
 
         int books = bookRepository.findAll().size();
