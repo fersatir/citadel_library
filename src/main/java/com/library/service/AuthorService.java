@@ -7,7 +7,6 @@ import com.library.exception.ResourceNotFoundException;
 import com.library.exception.message.ErrorMessage;
 import com.library.repository.AuthorRepository;
 import com.library.repository.BookRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -52,11 +51,10 @@ public class AuthorService {
 
         if (foundAuthor.getBuiltIn()){
             throw new BadRequestException(String.format(ErrorMessage.AUTHOR_BUILTIN_TRUE_DELETE_MESSAGE,id));
-        } else if (bookRepository.existsBookAuthorId(id) != null){
+        } else if (!bookRepository.existsBookAuthorId(id).isEmpty()){
             throw new ConflictException(String.format(ErrorMessage.AUTHOR_NOT_DELETE_MESSAGE,id));
-        }else{
-            authorRepository.deleteById(id);
         }
+        authorRepository.deleteById(id);
         return foundAuthor;
     }
 
