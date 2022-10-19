@@ -52,11 +52,11 @@ public class LoanService {
         User user= userRepository.findById(loanDTO.getUserId()).orElseThrow(()->
                 new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, loanDTO.getUserId())));
 
-        //Kullanıcının aldığı kitapların expireDate tarihlerini alıyoruz.
-         List<Loan> expireDates = loanRepository.expireDate(loanDTO.getUserId());
+        //Kullanıcının aldığı kitapların listesiniz alıyoruz.
+         List<Loan> userLoans = loanRepository.getUserLoans(loanDTO.getUserId());
 
         //loan isteğinde bulunan kullanıcının aldığı kitaplardan expire tarihlerini alıyoruz calculateUserIsLoanable methodunda getirmediği kitap olup olmadığı kontrol ediliyor.
-         calculateUserIsLoanable(expireDates,user.getScore());
+         calculateUserIsLoanable(userLoans,user.getScore());
 
         Loan loan = new Loan();
         loan.setUser(user);
@@ -93,18 +93,18 @@ public class LoanService {
     }
 
     // Kullanıcının aldığı kitabı getirmeme durumuna (expiredate) göre kitap alıp alamayacağını kontrol eden method
-    public void calculateUserIsLoanable(List<Loan> expireDates, int score){
+    public void calculateUserIsLoanable(List<Loan> userLoans, int score){
         LocalDateTime ld = LocalDateTime.now();
         int maxBookLoan = userHowMuchBookGet(score);
         int sayac = 0;
-        for (Loan l:expireDates) {
+        for (Loan l:userLoans) {
             if(l.getReturnDate() == null){
                 sayac++;
                 Boolean expired =  l.getExpireDate().isBefore(ld);
                 if(expired){
-                    throw new BadRequestException("Aldığınız kitabın iade tarihi geciktiği için kitap alamazsın.");
+                    throw new BadRequestException("Aldığınız kitabın iade tarihi geciktiğin için kitap alamazsın.");
                 }else if(sayac>=maxBookLoan){
-                    throw new BadRequestException("Kitap alma kotanızı doldurdunuz, Yeni kitap almak için elinizdekilerden iade etmelisiniz. ");
+                    throw new BadRequestException("Kitap alma kotanızı doldurdunuz, Yeni kitap almak için elinizdekilerden iade etmelisiniz.");
                 }
             }
         }
