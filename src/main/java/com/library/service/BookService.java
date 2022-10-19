@@ -16,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 
@@ -49,15 +48,7 @@ public class BookService {
     public BookDTO createBook(BookDTO bookDto) {
 
         Book book = bookMapper.bookDTOToBook(bookDto);
-
-        Category category = categoryRepository.findById(bookDto.getCategory_id()).orElse(null);
-        Author author = authorRepository.findById(bookDto.getAuthor_id()).orElse(null);
-        Publisher publisher = publisherRepository.findById(bookDto.getPublisher_id()).orElse(null);
-
-
-        book.setCategory(category);
-        book.setAuthor(author);
-        book.setPublisher(publisher);
+        bookForeign(book,bookDto);
 
         bookRepository.save(book);
 
@@ -79,13 +70,7 @@ public class BookService {
 
         foundBook = bookMapper.bookDTOToBook(bookDTO);
 
-        Category category = categoryRepository.findById(bookDTO.getCategory_id()).orElse(null);
-        Author author = authorRepository.findById(bookDTO.getAuthor_id()).orElse(null);
-        Publisher publisher = publisherRepository.findById(bookDTO.getPublisher_id()).orElse(null);
-
-        foundBook.setCategory(category);
-        foundBook.setAuthor(author);
-        foundBook.setPublisher(publisher);
+        bookForeign(foundBook,bookDTO);
 
         bookRepository.save(foundBook);
 
@@ -119,5 +104,15 @@ public class BookService {
         } else {
             throw new BadRequestException(ErrorMessage.INVALID_BOOK_PARAMETER_MESSAGE);
         }
+    }
+
+    private void bookForeign(Book book, BookDTO bookDto){
+        Category category = categoryRepository.findById(bookDto.getCategory_id()).orElse(null);
+        Author author = authorRepository.findById(bookDto.getAuthor_id()).orElse(null);
+        Publisher publisher = publisherRepository.findById(bookDto.getPublisher_id()).orElse(null);
+
+        book.setCategory(category);
+        book.setAuthor(author);
+        book.setPublisher(publisher);
     }
 }

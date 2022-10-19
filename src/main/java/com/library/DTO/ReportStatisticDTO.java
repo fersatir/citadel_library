@@ -1,4 +1,4 @@
-package com.library.dto.response;
+package com.library.dto;
 
 import lombok.Getter;
 import lombok.Setter;

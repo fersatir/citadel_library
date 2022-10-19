@@ -1,7 +1,9 @@
 package com.library.service;
 
+import com.library.domain.Book;
 import com.library.domain.Category;
 import com.library.domain.enums.RoleType;
+import com.library.exception.BadRequestException;
 import com.library.exception.ConflictException;
 import com.library.exception.ResourceNotFoundException;
 import com.library.exception.message.ErrorMessage;
@@ -53,11 +55,11 @@ public class CategoryService {
         Category foundCategory = categoryRepository.findById(id).orElseThrow(()->
                 new ResourceNotFoundException(String.format(ErrorMessage.CATEGORY_NOT_FOUND_MESSAGE, id)));
 
-        if(bookRepository.existsBookCategoryId(id) != null){
-            throw new ConflictException(String.format(ErrorMessage.CATEGORY_NOT_DELETE_MESSAGE,id));
-        }else{
-            categoryRepository.delete(foundCategory);
-        }
+        if(!bookRepository.returnBooks(id).isEmpty()){
+            throw new BadRequestException(String.format(ErrorMessage.CATEGORY_NOT_DELETE_MESSAGE,id));
+        }else if(foundCategory.getBuiltIn() == true){
+            throw new ConflictException(String.format(ErrorMessage.CATEGORY_NOT_DELETE_BUILTIN_MESSAGE,id));
+        }else categoryRepository.delete(foundCategory);
 
         return foundCategory;
     }

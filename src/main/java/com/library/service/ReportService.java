@@ -1,15 +1,18 @@
 package com.library.service;
 
 import com.library.domain.*;
-import com.library.dto.response.ReportMostPopularBookDTO;
-import com.library.dto.response.ReportStatisticDTO;
+import com.library.dto.*;
+import com.library.dto.mapper.BookMapper;
+import com.library.exception.BadRequestException;
 import com.library.repository.*;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import javax.persistence.Query;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -21,30 +24,87 @@ public class ReportService {
     CategoryRepository categoryRepository;
     LoanRepository loanRepository;
 
+    BookMapper bookMapper;
+
     //TODO Eksik kısımlar tamamlanacak ReportStatisticDTO referans alınacak
     public ReportStatisticDTO getAllStatistic() {
 
-     List<Book> books =  bookRepository.findAll();
-     List<Author> authors =  authorRepository.findAll();
-     List<Publisher> publishers =  publisherRepository.findAll();
-     List<Category> categories =  categoryRepository.findAll();
-     List<Loan> loans =  loanRepository.findAll();
+        int books = bookRepository.findAll().size();
+        int authors = authorRepository.findAll().size();
+        int publishers = publisherRepository.findAll().size();
+        int categories = categoryRepository.findAll().size();
+        int loans = loanRepository.findAll().size();
 
-     ReportStatisticDTO statistics = new ReportStatisticDTO();
+        ReportStatisticDTO statistics = new ReportStatisticDTO();
 
-     statistics.setBooksNumber(books.size());
-     statistics.setAuthorNumber(authors.size());
-     statistics.setPublisherNumber(publishers.size());
-     statistics.setCategoryNumber(categories.size());
-     statistics.setLoansNumber(loans.size());
+        statistics.setBooksNumber(books);
+        statistics.setAuthorNumber(authors);
+        statistics.setPublisherNumber(publishers);
+        statistics.setCategoryNumber(categories);
+        statistics.setLoansNumber(loans);
 
         return statistics;
     }
 
-
-    //TODO Most popular books get
+    @Transactional
     public Page<ReportMostPopularBookDTO> getMostPopularBooksWithPage(Pageable pageable) {
 
-        return null;
+       Page<ReportMostPopularBookDTO> mostPopulars = loanRepository.mostPopulars(pageable);
+
+        return mostPopulars;
     }
+
+    public Page<BookDTO> getExpiredBooksWithPage(Pageable pageable, LocalDateTime time) {
+
+        Page<BookDTO> bookDTOs = loanRepository.expiredBooks(pageable,time);
+
+        return bookDTOs;
+    }
+
+    public Page<BookDTO> getUnreturnedBooksWithPage(Pageable pageable, LocalDateTime time) {
+
+        Page<BookDTO> bookDTOs = loanRepository.unreturned(pageable,time);
+
+        return bookDTOs;
+    }
+
+
+    public Page<ReportMostBorrowersDTO> getMostBorrowersWithPage(Pageable pageable) {
+
+        Page<ReportMostBorrowersDTO> mostBorrowers = loanRepository.mostBorrowers(pageable);
+
+        return mostBorrowers;
+    }
+
+
+
+    /*
+
+    unreturned için alternatif çözüm
+     List<Loan> loans = loanRepository.findAll();
+        List<Loan> unreturnedList = new ArrayList<>();
+        List<BookDTO> unreturnedBookList = new ArrayList<>();
+
+        for (Loan each: loans) {
+            if (each.getExpireDate().isBefore(LocalDateTime.now()) && each.getReturnDate() == null){
+                unreturnedList.add(each);
+            }
+        }
+
+        if(unreturnedList.isEmpty()){
+            throw new BadRequestException("tüm kitaplar geri verilmiştir.");
+        }
+
+        for (Loan each: unreturnedList) {
+            Book book = each.getBook();
+            BookDTO bookDTO = bookMapper.bookToBookDTO(book);
+            bookDTO.setCategory_id(book.getCategory().getId());
+            bookDTO.setAuthor_id(book.getAuthor().getId());
+            bookDTO.setPublisher_id(book.getPublisher().getId());
+
+            unreturnedBookList.add(bookDTO);
+        }
+
+        return unreturnedBookList;
+     */
 }

@@ -29,7 +29,6 @@ public class LoanController {
 
     private LoanService loanService;
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     @PostMapping("/add")
     public ResponseEntity<LoanDTO> createLoan(@Valid @RequestBody LoanDTO loanDTO){
 
@@ -45,9 +44,9 @@ public class LoanController {
                                                           @RequestParam(required = false, value = "page", defaultValue = "0") int page,
                                                           @RequestParam(required = false,value = "size", defaultValue = "20") int size,
                                                           @RequestParam(required = false,value = "sort", defaultValue = "loanDate") String prop,
-                                                          @RequestParam(required = false,value = "direction", defaultValue = "DESC") Sort.Direction direction){
+                                                          @RequestParam(required = false,value = "type", defaultValue = "DESC") Sort.Direction type){
 
-        Pageable pageable = PageRequest.of(page,size,Sort.by(direction,prop));
+        Pageable pageable = PageRequest.of(page,size,Sort.by(type,prop));
         Long idLogin = (Long) request.getAttribute("id");
         Page<LoanResponse> loanAutUser = loanService.getAuthenticatedUserLoans(pageable,idLogin);
 
@@ -72,9 +71,9 @@ public class LoanController {
                                                                @RequestParam(required = false, value = "page", defaultValue = "0") int page,
                                                                @RequestParam(required = false,value = "size", defaultValue = "20") int size,
                                                                @RequestParam(required = false,value = "sort", defaultValue = "loanDate") String prop,
-                                                               @RequestParam(required = false,value = "direction", defaultValue = "DESC") Sort.Direction direction){
+                                                               @RequestParam(required = false,value = "type", defaultValue = "DESC") Sort.Direction type){
 
-        Pageable pageable = PageRequest.of(page,size,Sort.by(direction,prop));
+        Pageable pageable = PageRequest.of(page,size,Sort.by(type,prop));
         Page<LoanResponse> loanSpecifiedUser = loanService.getLoansSpecifiedUserById(pageable,id);
 
         return ResponseEntity.ok(loanSpecifiedUser);
@@ -87,9 +86,9 @@ public class LoanController {
                                                                @RequestParam(required = false, value = "page", defaultValue = "0") int page,
                                                                @RequestParam(required = false,value = "size", defaultValue = "20") int size,
                                                                @RequestParam(required = false,value = "sort", defaultValue = "loanDate") String prop,
-                                                               @RequestParam(required = false,value = "direction", defaultValue = "DESC") Sort.Direction direction){
+                                                               @RequestParam(required = false,value = "type", defaultValue = "DESC") Sort.Direction type){
 
-        Pageable pageable = PageRequest.of(page,size,Sort.by(direction,prop));
+        Pageable pageable = PageRequest.of(page,size,Sort.by(type,prop));
         Page<LoanResponseBook> loanSpecifiedUser = loanService.getLoansSpecifiedBookById(pageable,id);
 
         return ResponseEntity.ok(loanSpecifiedUser);

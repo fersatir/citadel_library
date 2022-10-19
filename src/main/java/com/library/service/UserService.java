@@ -125,8 +125,8 @@ public class UserService {
                 new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, id)));
        List<Loan> loans = loanRepository.expireDate(id);
 
-        for (int i = 0; i <loans.size()-1 ; i++) {
-            if (loans.get(i).equals(null)){
+        for (Loan each : loans) {
+            if (each.equals(null)){
                 throw new BadRequestException("User can not deleted");
             }
         }

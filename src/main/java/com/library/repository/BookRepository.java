@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -21,7 +22,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
                                                                  @Param("publisher") Optional<Long> publisher, Pageable pageable);
 
     @Query("SELECT u FROM Book u WHERE u.category.id = ?1")
-    Book existsBookCategoryId(Long id);
+    List<Book> returnBooks(Long id);
 
     @Query("SELECT p FROM Book p WHERE p.publisher.id = ?1")
     Book existsBookPublisherId(Long id);
