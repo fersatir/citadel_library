@@ -42,13 +42,4 @@ public class UserDTO {
         this.roles=rolesStr;
     }
 
-    public UserDTO(Long id, String firstName, String lastName, Integer score, String phone,
-                   String email) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.score = score;
-        this.phone = phone;
-        this.email = email;
-    }
 }
