@@ -8,7 +8,7 @@ import com.library.dto.requests.AdminUpdateUserRequest;
 import com.library.dto.requests.UserUpdateRequest;
 import com.library.dto.response.CLResponse;
 import com.library.dto.response.UserLoansResponse;
-import com.library.service.UpdatePasswordRequest;
+import com.library.dto.requests.UpdatePasswordRequest;
 import com.library.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,9 +35,9 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     @PostMapping("/add")
-    public ResponseEntity<UserCreateDTO> createUser(@Valid @RequestBody UserCreateDTO userCreateDTO){
-
-        UserCreateDTO user = userService.createUser(userCreateDTO);
+    public ResponseEntity<UserCreateDTO> createUser(@Valid @RequestBody UserCreateDTO userCreateDTO,HttpServletRequest request){
+       Long idLogin = (Long)request.getAttribute("id");
+        UserCreateDTO user = userService.createUser(userCreateDTO,idLogin);
 
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
@@ -94,9 +94,13 @@ public class UserController {
 
     }
 
+    @PutMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserDTO> deleteUser(@PathVariable  Long id){
+       UserDTO userDTO = userService.delUser(id);
 
-
-
+        return ResponseEntity.ok(userDTO);
+    }
 
 
     @PutMapping("/{id}")

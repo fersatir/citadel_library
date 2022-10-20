@@ -15,11 +15,11 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Query("select user from User user where user.isActive=true")
-    Optional<User> findByEmail(String email);
+  //  @Query("select user from User user where user.isActive=true and user.email=: email")
+   Optional <User> findByEmail(String email);
 
 
-    @Query("Select user from User user where user.isActive=true")
+   // @Query("Select user from User user where user.isActive=true")
     Optional<User> findById(Long userId);
 
     Boolean existsByEmail(String email);

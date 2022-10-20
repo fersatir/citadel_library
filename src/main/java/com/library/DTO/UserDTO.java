@@ -2,6 +2,7 @@ package com.library.dto;
 
 import com.library.domain.Loan;
 import com.library.domain.Role;
+import com.library.domain.User;
 import com.library.domain.enums.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,6 +29,8 @@ public class UserDTO {
     private String email;
     private LocalDateTime createDate;
     private String resetPasswordCode;
+
+    private Boolean isActive=true;
     private Boolean builtIn = false;
     private Set<String> roles;
 
@@ -42,4 +45,17 @@ public class UserDTO {
         this.roles=rolesStr;
     }
 
+    public UserDTO (User user){
+        this.id=user.getId();
+        this.firstName=user.getFirstName();
+        this.lastName=user.getLastName();
+        this.score=user.getScore();
+        this.address=user.getAddress();
+        this.phone=user.getPhone();
+        this.birthDate=user.getBirthDate();
+        this.email=user.getEmail();
+        this.createDate=user.getCreateDate();
+        this.resetPasswordCode=user.getResetPasswordCode();
+        this.isActive=user.getIsActive();
+    }
 }

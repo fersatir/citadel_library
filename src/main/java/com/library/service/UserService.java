@@ -6,9 +6,7 @@ import com.library.domain.User;
 import com.library.domain.enums.RoleType;
 import com.library.dto.UserDTO;
 import com.library.dto.mapper.UserMapper;
-import com.library.dto.requests.AdminUpdateUserRequest;
-import com.library.dto.requests.RegisterRequest;
-import com.library.dto.requests.UserUpdateRequest;
+import com.library.dto.requests.*;
 import com.library.dto.response.UserLoansResponse;
 import com.library.exception.BadRequestException;
 import com.library.exception.ConflictException;
@@ -43,27 +41,31 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
 
-    public UserCreateDTO createUser(UserCreateDTO userCreateDTO) {
+    public UserCreateDTO createUser(UserCreateDTO userCreateDTO, Long idLogin) {
 
         boolean emailExist = userRepository.existsByEmail(userCreateDTO.getEmail());
-        User user = userMapper.userCreateDTOToUser(userCreateDTO);
+        User user = userRepository.findById(idLogin).orElseThrow(() ->
+                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, idLogin)));
 
-        if (emailExist){
-            throw new ConflictException(String.format(ErrorMessage.EMAIL_ALREADY_EXIST_MESSAGE, user.getEmail()));
+        Set<Role> loginUserRoles = user.getRoles();
+        RoleType loginUser = loginUserRoles.stream().findFirst().get().getName();
+
+
+        if (loginUser.equals(RoleType.ROLE_STAFF)&& userCreateDTO.getRoleName()== null) {
+        }
+        if(loginUser.equals(RoleType.ROLE_ADMIN) && userCreateDTO.getRoleName()== null){
         }
 
-        Role ro = new Role();
-        ro.setName(roleRepository.findById(userCreateDTO.getRoleId()).get().getName());
-
-        Set<Role> roles = new HashSet<>();
-        roles.add(ro);
-
-        userRepository.save(user);
-
-        userCreateDTO.setId(user.getId());
-
+        if (emailExist) {
+            throw new ConflictException(String.format(ErrorMessage.EMAIL_ALREADY_EXIST_MESSAGE, user.getEmail()));
+        }
+        String encodedPassword = passwordEncoder.encode(userCreateDTO.getPassword());
+        userCreateDTO.setPassword(encodedPassword);
+        User createUser = userMapper.userCreateDTOToUser(userCreateDTO);
+        userRepository.save(createUser);
+        userCreateDTO.setId(createUser.getId());
+        // TODO rol bilgisi db'ye kayıt olmuyor. Bunu düzelt. Rol degeri girilmediği takdirde otomatik member kaydediliyor, ancak deger girildiğinde hata dönüyor.
         return userCreateDTO;
-
     }
 
     public UserDTO register(RegisterRequest request) {
@@ -84,7 +86,7 @@ public class UserService {
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
         user.setAddress(request.getAddress());
-        user.setPassword(encodedPassword);// security eklendikten sonra hashlenmiş password set edilecek
+        user.setPassword(encodedPassword);
         user.setBirthDate(request.getBirthDate());
         user.setCreateDate(request.getCreateDate());
         user.setPhone(request.getPhone());
@@ -104,10 +106,10 @@ public class UserService {
 
         Page<UserDTO> dtoPage = null;
 
-            dtoPage = userRepository.findUsersQueryOptionalSearchWithPage(query, pageable);
-            return dtoPage;
-    //  dtoPage = userRepository.findUserWithPage(pageable);
-    //    return dtoPage;
+        dtoPage = userRepository.findUsersQueryOptionalSearchWithPage(query, pageable);
+        return dtoPage;
+        //  dtoPage = userRepository.findUserWithPage(pageable);
+        //    return dtoPage;
     }
 
     public List<UserDTO> getAllUsers() {
@@ -119,23 +121,30 @@ public class UserService {
     public UserDTO getUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, id)));
+
         return userMapper.userToUserDTO(user);
     }
 
-    public UserDTO removeById(Long id) {
+    public UserDTO delUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, id)));
-       List<Loan> loans = loanRepository.getUserLoans(id);
 
-        for (Loan each : loans) {
-            if (each.equals(null)){
-                throw new BadRequestException("User can not deleted");
-            }
-        }
         if (user.getBuiltIn()) {
             throw new BadRequestException(String.format(ErrorMessage.CANT_PROCESS__WITH_BUILT_IN_TRUE_USER));
         }
-        userRepository.deleteById(id);
+        if (!user.getIsActive()){
+            throw new BadRequestException("User is not already active");
+        }
+
+        List<Loan> loans = loanRepository.getUserLoans(id);
+
+        for (Loan each : loans) {
+            if (!each.equals(null)) {
+                throw new BadRequestException(ErrorMessage.NOT_DELETE_USER_HAS_LOANS);
+            }
+        }
+        user.setIsActive(false);
+        userRepository.save(user);
         return userMapper.userToUserDTO(user);
     }
 
@@ -155,9 +164,7 @@ public class UserService {
 
         Set<Role> userRoles = user.getRoles();
         RoleType updateRoleName = userRoles.stream().findFirst().get().getName();
-
-        Set<Role> loginUserRoles = userLogin.getRoles();
-        RoleType loginUserRole = loginUserRoles.stream().findFirst().get().getName();
+        RoleType loginUserRole = userRoles.stream().findFirst().get().getName();
 
         if (loginUserRole.equals(RoleType.ROLE_STAFF) && updateRoleName.equals(RoleType.ROLE_ADMIN)) {
             throw new BadRequestException(ErrorMessage.STAFF_DOESNT_PROCESS_ABOUT_ADMIN);
@@ -252,6 +259,9 @@ public class UserService {
         if (user.getBuiltIn()) {
             throw new BadRequestException(ErrorMessage.CANT_PROCESS__WITH_BUILT_IN_TRUE_USER);
         }
+        if (!user.getIsActive()) {
+            throw new BadRequestException("User doesn't active");
+        }
         if (!passwordEncoder.matches(passwordRequest.getOldPassword(), user.getPassword())) {
             throw new BadRequestException(ErrorMessage.PASSWORD_DOESNT_MATCH);
         }
@@ -274,4 +284,12 @@ public class UserService {
 
         return authUserLoans;
     }
+
+    public void emailToUser(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (!user.get().getIsActive()) {
+            throw new BadRequestException("User doesn't active");
+        }
+    }
+
 }
