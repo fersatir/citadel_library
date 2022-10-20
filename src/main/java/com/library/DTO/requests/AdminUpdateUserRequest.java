@@ -58,6 +58,9 @@ public class AdminUpdateUserRequest {
 
     private String resetPasswordCode;
 
+    @NotNull
+    private Boolean isActive=true;
+
     private Boolean builtIn;
 
     private Set<String> roles;

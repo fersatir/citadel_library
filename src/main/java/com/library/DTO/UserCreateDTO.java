@@ -2,6 +2,8 @@ package com.library.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.library.domain.Role;
+import com.library.domain.enums.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +15,8 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -54,11 +58,20 @@ public class UserCreateDTO {
     private String password;
 
     private LocalDateTime createDate = LocalDateTime.now();
-
     private String resetPasswordCode;
-
+    @NotNull
+    private Boolean isActive=true;
     private Boolean builtIn = false;
+    private Set<String> roleName;
 
-    @NotNull(message="Please provide role")
-    private Long roleId;
+    public  void setRoles(Set<Role> roles){
+        Set<String> rolesStr= new HashSet<>();
+
+        roles.forEach(r->  {
+            if (r.getName().equals(RoleType.ROLE_ADMIN)){ rolesStr.add("Administrator");}
+            else if (r.getName().equals(RoleType.ROLE_STAFF)) {rolesStr.add("Staff");}
+            else  {rolesStr.add("Member");}
+        });
+        this.roleName=rolesStr;
+    }
 }
