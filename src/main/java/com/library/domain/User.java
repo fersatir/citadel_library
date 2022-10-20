@@ -74,6 +74,9 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String resetPasswordCode;
 
+    @Column(nullable = false)
+    private Boolean isActive=true;
+
     @NotNull(message="Please provide user builtIn")
     @Column(nullable = false)
     private Boolean builtIn = false;
@@ -85,7 +88,8 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
 
-    public User(String firstName, String lastName, Integer score, String address, String phone, Date birthDate, String email, String password, LocalDateTime createDate, String resetPasswordCode, Boolean builtIn, Set<Role> roles) {
+    public User(String firstName, String lastName, Integer score, String address, String phone, Date birthDate, String email,
+                String password, LocalDateTime createDate, String resetPasswordCode, Boolean builtIn, Set<Role> roles,boolean isActive) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.score = score;
@@ -98,5 +102,6 @@ public class User {
         this.resetPasswordCode = resetPasswordCode;
         this.builtIn = builtIn;
         this.roles = roles;
+        this.isActive=isActive;
     }
 }

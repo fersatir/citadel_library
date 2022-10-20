@@ -55,6 +55,8 @@ public class RegisterRequest {
 
     @NotNull(message="Please provide createDate")
     private LocalDateTime createDate;
+    @NotNull
+    private Boolean isActive=true;
 
     private String resetPasswordCode;
 }

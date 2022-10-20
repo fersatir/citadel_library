@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -24,10 +25,16 @@ import java.util.Optional;
 public class BookService {
 
     BookRepository bookRepository;
+
     AuthorRepository authorRepository;
+
     CategoryRepository categoryRepository;
+
     PublisherRepository publisherRepository;
     BookMapper bookMapper;
+
+    LoanRepository loanRepository;
+
 
     public BookDTO getOneBookById(Long id) {
 
@@ -42,7 +49,15 @@ public class BookService {
     public BookDTO createBook(BookDTO bookDto) {
 
         Book book = bookMapper.bookDTOToBook(bookDto);
-        bookForeign(book,bookDto);
+
+        Category category = categoryRepository.findById(bookDto.getCategory_id()).orElse(null);
+        Author author = authorRepository.findById(bookDto.getAuthor_id()).orElse(null);
+        Publisher publisher = publisherRepository.findById(bookDto.getPublisher_id()).orElse(null);
+
+
+        book.setCategory(category);
+        book.setAuthor(author);
+        book.setPublisher(publisher);
 
         bookRepository.save(book);
 
@@ -51,19 +66,26 @@ public class BookService {
         return bookDto;
     }
 
+
     public BookDTO updateBookById(Long id, BookDTO bookDTO) {
 
-        Book foundBook = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException
-                (String.format(ErrorMessage.BOOK_NOT_FOUND_MESSAGE, id)));
+        Book foundBook = bookRepository.findById(id).orElse(null);
 
         if (foundBook.getBuiltIn()) {
-            throw new RuntimeException(String.format(ErrorMessage.BOOK_NOT_AVAILABLE_TO_REMOVE_MESSAGE,id));
+            throw new RuntimeException("It is not permitted to change");
         }
 
         bookDTO.setId(id);
+
         foundBook = bookMapper.bookDTOToBook(bookDTO);
 
-        bookForeign(foundBook,bookDTO);
+        Category category = categoryRepository.findById(bookDTO.getCategory_id()).orElse(null);
+        Author author = authorRepository.findById(bookDTO.getAuthor_id()).orElse(null);
+        Publisher publisher = publisherRepository.findById(bookDTO.getPublisher_id()).orElse(null);
+
+        foundBook.setCategory(category);
+        foundBook.setAuthor(author);
+        foundBook.setPublisher(publisher);
 
         bookRepository.save(foundBook);
 
@@ -75,15 +97,14 @@ public class BookService {
         Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException
                 (String.format(ErrorMessage.BOOK_NOT_FOUND_MESSAGE, id)));
 
-        if (!book.getLoanable() && book.getBuiltIn()) {
+        if (!book.getLoanable()) {
             throw new BadRequestException(String.format(ErrorMessage.BOOK_NOT_AVAILABLE_TO_REMOVE_MESSAGE, id));
         }
-
-        bookRepository.delete(book);
         BookDTO bookDTO = bookMapper.bookToBookDTO(book);
 
         return bookDTO;
     }
+
 
     @Transactional(readOnly = true)
     public Page<BookDTO> findAllWithPage(Optional<String> query, Optional<Long> categoryId, Optional<Long> authorId,
@@ -98,18 +119,5 @@ public class BookService {
         } else {
             throw new BadRequestException(ErrorMessage.INVALID_BOOK_PARAMETER_MESSAGE);
         }
-    }
-
-    private void bookForeign(Book book, BookDTO bookDto){
-        Category category = categoryRepository.findById(bookDto.getCategory_id()).orElseThrow(() ->
-                new ResourceNotFoundException(String.format(ErrorMessage.CATEGORY_NOT_FOUND_MESSAGE, bookDto.getCategory_id())));
-        Author author = authorRepository.findById(bookDto.getAuthor_id()).orElseThrow(() ->
-                new ResourceNotFoundException(String.format(ErrorMessage.AUTHOR_NOT_FOUND_MESSAGE, bookDto.getAuthor_id())));
-        Publisher publisher = publisherRepository.findById(bookDto.getPublisher_id()).orElseThrow(() ->
-                new ResourceNotFoundException(String.format(ErrorMessage.PUBLISHER_NOT_FOUND_MESSAGE, bookDto.getPublisher_id())));
-
-        book.setCategory(category);
-        book.setAuthor(author);
-        book.setPublisher(publisher);
     }
 }
