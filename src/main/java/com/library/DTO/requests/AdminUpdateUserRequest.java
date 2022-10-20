@@ -63,5 +63,5 @@ public class AdminUpdateUserRequest {
 
     private Boolean builtIn;
 
-    private Set<String> roles;
+    private Long roles;
 }
