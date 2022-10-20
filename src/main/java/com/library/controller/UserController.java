@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -66,13 +67,14 @@ public class UserController {
 
     @GetMapping("/page")
     @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
-    public ResponseEntity<Page<UserDTO>> getAllUsersPage(@RequestParam(required = false, value = "page",defaultValue = "0") int page,
+    public ResponseEntity<Page<UserDTO>> getAllUsersPage(@RequestParam(required = false,value = "search")Optional <String> query,
+                                                         @RequestParam(required = false, value = "page",defaultValue = "0") int page,
                                                          @RequestParam(required = false, value = "size",defaultValue = "20") int size,
-                                                         @RequestParam(required = false, value = "sort",defaultValue = "createDate") String prop,
+                                                         @RequestParam(required = false, value = "sort",defaultValue = "id") String prop,
                                                          @RequestParam(required = false, value = "direction",defaultValue = "DESC")Sort.Direction direction){
 
         Pageable pageable = PageRequest.of(page,size,Sort.by(direction,prop));
-        Page<UserDTO> userDTOPage = userService.getUserPage(pageable);
+        Page<UserDTO> userDTOPage = userService.getUserPage(query,pageable);
         return ResponseEntity.ok(userDTOPage);
     }
 
@@ -93,12 +95,9 @@ public class UserController {
     }
 
 
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<UserDTO> deleteUserById(@PathVariable Long id){
-    UserDTO userDTO=userService.removeById(id);
-    return ResponseEntity.ok(userDTO);
-    }
+
+
+
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")

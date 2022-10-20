@@ -8,6 +8,8 @@ import com.library.dto.requests.AdminUpdateUserRequest;
 import com.library.dto.requests.UserUpdateRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -21,7 +23,6 @@ public interface UserMapper {
     User userCreateDTOToUser(UserCreateDTO userCreateDTO);
 
     List<UserDTO> map(List<User>user);
-
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "roles", ignore = true)

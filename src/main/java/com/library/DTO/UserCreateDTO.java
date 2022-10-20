@@ -57,6 +57,9 @@ public class UserCreateDTO {
 
     private String resetPasswordCode;
 
+    @NotNull
+    private boolean isActive;
+
     private Boolean builtIn = false;
 
     @NotNull(message="Please provide role")

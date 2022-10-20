@@ -74,6 +74,10 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String resetPasswordCode;
 
+    @Column(nullable = false)
+
+    private boolean isActive=true;
+
     @NotNull(message="Please provide user builtIn")
     @Column(nullable = false)
     private Boolean builtIn = false;

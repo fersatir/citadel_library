@@ -29,7 +29,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
+
 
 @Service
 @AllArgsConstructor
@@ -45,12 +45,16 @@ public class UserService {
 
     public UserCreateDTO createUser(UserCreateDTO userCreateDTO) {
 
-        //TODO kayıt yapmaya çalışan kullanıcının role bilgisine göre (admin, employee), kayıt edilecek kullanıcıya role atanacak
-
+        boolean emailExist = userRepository.existsByEmail(userCreateDTO.getEmail());
         User user = userMapper.userCreateDTOToUser(userCreateDTO);
+
+        if (emailExist){
+            throw new ConflictException(String.format(ErrorMessage.EMAIL_ALREADY_EXIST_MESSAGE, user.getEmail()));
+        }
 
         Role ro = new Role();
         ro.setName(roleRepository.findById(userCreateDTO.getRoleId()).get().getName());
+
         Set<Role> roles = new HashSet<>();
         roles.add(ro);
 
@@ -95,17 +99,15 @@ public class UserService {
 
     }
 
-    public Page<UserDTO> getUserPage(Pageable pageable) {
-        Page<User> userPage = userRepository.findAll(pageable);
+    @Transactional(readOnly = true)
+    public Page<UserDTO> getUserPage(Optional<String> query, Pageable pageable) {
 
-        Page<UserDTO> dtoPage = userPage.map(new Function<User, UserDTO>() {
-            @Override
-            public UserDTO apply(User user) {
-                return userMapper.userToUserDTO(user);
-            }
-        });
+        Page<UserDTO> dtoPage = null;
 
-        return dtoPage;
+            dtoPage = userRepository.findUsersQueryOptionalSearchWithPage(query, pageable);
+            return dtoPage;
+    //  dtoPage = userRepository.findUserWithPage(pageable);
+    //    return dtoPage;
     }
 
     public List<UserDTO> getAllUsers() {
@@ -131,7 +133,7 @@ public class UserService {
             }
         }
         if (user.getBuiltIn()) {
-            throw new BadRequestException("Not_Permitted");
+            throw new BadRequestException(String.format(ErrorMessage.CANT_PROCESS__WITH_BUILT_IN_TRUE_USER));
         }
         userRepository.deleteById(id);
         return userMapper.userToUserDTO(user);
@@ -147,6 +149,10 @@ public class UserService {
         User userLogin = userRepository.findById(idLogin).orElseThrow(() ->
                 new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, idLogin)));
 
+        if (user.getBuiltIn()) {
+            throw new BadRequestException(ErrorMessage.CANT_PROCESS__WITH_BUILT_IN_TRUE_USER);
+        }
+
         Set<Role> userRoles = user.getRoles();
         RoleType updateRoleName = userRoles.stream().findFirst().get().getName();
 
@@ -154,13 +160,10 @@ public class UserService {
         RoleType loginUserRole = loginUserRoles.stream().findFirst().get().getName();
 
         if (loginUserRole.equals(RoleType.ROLE_STAFF) && updateRoleName.equals(RoleType.ROLE_ADMIN)) {
-            throw new BadRequestException("Not_permitted");
+            throw new BadRequestException(ErrorMessage.STAFF_DOESNT_PROCESS_ABOUT_ADMIN);
         }
         if (loginUserRole.equals(RoleType.ROLE_STAFF) && updateRoleName.equals(RoleType.ROLE_STAFF)) {
-            throw new BadRequestException("Not permitted");
-        }
-        if (user.getBuiltIn()) {
-            throw new BadRequestException("Not_permitted");
+            throw new BadRequestException(ErrorMessage.STAFF_DOESNT_PROCESS_ABOUT_OTHER_STAFF);
         }
         if (emailExist && !adminUpdateUserRequest.getEmail().equals(user.getEmail())) {
             throw new ConflictException(String.format(ErrorMessage.EMAIL_ALREADY_EXIST_MESSAGE, user.getEmail()));
@@ -222,7 +225,7 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ErrorMessage.ROLE_NOT_FOUND_MESSAGE));
 
         if (user.getBuiltIn()) {
-            throw new BadRequestException("Not permitted");
+            throw new BadRequestException(ErrorMessage.CANT_PROCESS__WITH_BUILT_IN_TRUE_USER);
         }
 
         if (existEmail && !request.getEmail().equals(user.getEmail())) {
@@ -247,10 +250,10 @@ public class UserService {
         User user = optUser.get();
 
         if (user.getBuiltIn()) {
-            throw new BadRequestException("Not_permitted");
+            throw new BadRequestException(ErrorMessage.CANT_PROCESS__WITH_BUILT_IN_TRUE_USER);
         }
         if (!passwordEncoder.matches(passwordRequest.getOldPassword(), user.getPassword())) {
-            throw new BadRequestException("Password_not_matched");
+            throw new BadRequestException(ErrorMessage.PASSWORD_DOESNT_MATCH);
         }
 
         String encodedPassword = passwordEncoder.encode(passwordRequest.getNewPassword());
@@ -258,15 +261,15 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public Page<UserLoansResponse> getUserLoans(Long id,Pageable pageable) {
+    public Page<UserLoansResponse> getUserLoans(Long id, Pageable pageable) {
 
-        User user = userRepository.findById(id).orElseThrow(()->
-                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE,id)));
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, id)));
 
-        Page<UserLoansResponse> authUserLoans = loanRepository.getAuthUserLoans(id,pageable);
+        Page<UserLoansResponse> authUserLoans = loanRepository.getAuthUserLoans(id, pageable);
 
-        if (authUserLoans.isEmpty()){
-            throw new ResourceNotFoundException(String.format(ErrorMessage.LOAN_NOT_FOUND_MESSAGE,id));
+        if (authUserLoans.isEmpty()) {
+            throw new ResourceNotFoundException(String.format(ErrorMessage.LOAN_NOT_FOUND_MESSAGE, id));
         }
 
         return authUserLoans;
