@@ -8,6 +8,7 @@ import com.library.dto.UserDTO;
 import com.library.dto.mapper.UserMapper;
 import com.library.dto.requests.AdminUpdateUserRequest;
 import com.library.dto.requests.RegisterRequest;
+import com.library.dto.requests.UpdatePasswordRequest;
 import com.library.dto.requests.UserUpdateRequest;
 import com.library.dto.response.UserLoansResponse;
 import com.library.exception.BadRequestException;
@@ -23,7 +24,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;

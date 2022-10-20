@@ -34,10 +34,6 @@ public class BookService {
         Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException
                 (String.format(ErrorMessage.BOOK_NOT_FOUND_MESSAGE, id)));
 
-        if (!book.getActive()){
-            throw new ResourceNotFoundException(String.format(ErrorMessage.ACTIVE_BOOK_NOT_FOUND_MESSAGE, id));
-        }
-
         BookDTO bookDTO = bookMapper.bookToBookDTO(book);
 
         return bookDTO;
@@ -93,7 +89,7 @@ public class BookService {
     public Page<BookDTO> findAllWithPage(Optional<String> query, Optional<Long> categoryId, Optional<Long> authorId,
                                          Optional<Long> publisherId, Pageable pageable) {
 
-        Page<BookDTO> book = null;
+        Page<BookDTO> book;
 
         if (query.isPresent() || categoryId.isPresent() || authorId.isPresent() || publisherId.isPresent()) {
             book = bookRepository.findByQueryAndCatAndAuthorAndPublisherWithPage(query, categoryId,

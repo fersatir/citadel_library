@@ -21,6 +21,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
                                                                  @Param("author") Optional<Long> author,
                                                                  @Param("publisher") Optional<Long> publisher, Pageable pageable);
 
+    @Query("SELECT u FROM Book u WHERE u.active = true")
+    Optional<Book> findById(Long id);
+
     @Query("SELECT u FROM Book u WHERE u.category.id = ?1")
     List<Book> returnBooks(Long id);
 
