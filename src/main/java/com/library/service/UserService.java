@@ -46,25 +46,27 @@ public class UserService {
         boolean emailExist = userRepository.existsByEmail(userCreateDTO.getEmail());
         User user = userRepository.findById(idLogin).orElseThrow(() ->
                 new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, idLogin)));
+        if (emailExist) {
+            throw new ConflictException(String.format(ErrorMessage.EMAIL_ALREADY_EXIST_MESSAGE, user.getEmail()));
+        }
+
+        User createUser = userMapper.userCreateDTOToUser(userCreateDTO);
 
         Set<Role> loginUserRoles = user.getRoles();
         RoleType loginUser = loginUserRoles.stream().findFirst().get().getName();
 
+        if (loginUser.equals(RoleType.ROLE_STAFF)) {
+           createUser.setRoles(setRoles(3L));
+        }
+        if(loginUser.equals(RoleType.ROLE_ADMIN)){
+           createUser.setRoles( setRoles(userCreateDTO.getRoleId()));
+        }
 
-        if (loginUser.equals(RoleType.ROLE_STAFF)&& userCreateDTO.getRoleName()== null) {
-        }
-        if(loginUser.equals(RoleType.ROLE_ADMIN) && userCreateDTO.getRoleName()== null){
-        }
-
-        if (emailExist) {
-            throw new ConflictException(String.format(ErrorMessage.EMAIL_ALREADY_EXIST_MESSAGE, user.getEmail()));
-        }
         String encodedPassword = passwordEncoder.encode(userCreateDTO.getPassword());
         userCreateDTO.setPassword(encodedPassword);
-        User createUser = userMapper.userCreateDTOToUser(userCreateDTO);
+        createUser.setPassword(encodedPassword);
         userRepository.save(createUser);
         userCreateDTO.setId(createUser.getId());
-        // TODO rol bilgisi db'ye kayıt olmuyor. Bunu düzelt. Rol degeri girilmediği takdirde otomatik member kaydediliyor, ancak deger girildiğinde hata dönüyor.
         return userCreateDTO;
     }
 
@@ -92,9 +94,7 @@ public class UserService {
         user.setPhone(request.getPhone());
         user.setResetPasswordCode(request.getResetPasswordCode());
         user.setRoles(roles);
-     /*   UserDTO userDTO= userMapper.registerToUserDTO(request);
-        userDTO.setRoles(roles);
-        User user = userMapper.userDTOToUser(userDTO);*/
+
         userRepository.save(user);
         UserDTO userDTO = userMapper.userToUserDTO(user);
         return userDTO;
@@ -104,12 +104,10 @@ public class UserService {
     @Transactional(readOnly = true)
     public Page<UserDTO> getUserPage(Optional<String> query, Pageable pageable) {
 
-        Page<UserDTO> dtoPage = null;
+        Page<UserDTO> dtoPage;
 
         dtoPage = userRepository.findUsersQueryOptionalSearchWithPage(query, pageable);
         return dtoPage;
-        //  dtoPage = userRepository.findUserWithPage(pageable);
-        //    return dtoPage;
     }
 
     public List<UserDTO> getAllUsers() {
@@ -164,7 +162,8 @@ public class UserService {
 
         Set<Role> userRoles = user.getRoles();
         RoleType updateRoleName = userRoles.stream().findFirst().get().getName();
-        RoleType loginUserRole = userRoles.stream().findFirst().get().getName();
+        Set<Role> userloginRole= userLogin.getRoles();
+        RoleType loginUserRole = userloginRole.stream().findFirst().get().getName();
 
         if (loginUserRole.equals(RoleType.ROLE_STAFF) && updateRoleName.equals(RoleType.ROLE_ADMIN)) {
             throw new BadRequestException(ErrorMessage.STAFF_DOESNT_PROCESS_ABOUT_ADMIN);
@@ -182,13 +181,10 @@ public class UserService {
             adminUpdateUserRequest.setPassword(encodedPassword);
         }
 
-        Set<String> userStrRoles = adminUpdateUserRequest.getRoles();
-        Set<Role> roles = convertRoles(userStrRoles);
-
         User updateUser = userMapper.adminUpdateUserRequest(adminUpdateUserRequest);
 
         updateUser.setId(user.getId());
-        updateUser.setRoles(roles);
+        updateUser.setRoles(setRoles(adminUpdateUserRequest.getRoles()));
 
         userRepository.save(updateUser);
 
@@ -253,8 +249,8 @@ public class UserService {
 
     public void updatePassword(Long id, UpdatePasswordRequest passwordRequest) {
 
-        Optional<User> optUser = userRepository.findById(id);
-        User user = optUser.get();
+        User user = userRepository.findById(id).orElseThrow(()->
+                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE,id)));
 
         if (user.getBuiltIn()) {
             throw new BadRequestException(ErrorMessage.CANT_PROCESS__WITH_BUILT_IN_TRUE_USER);
@@ -290,6 +286,21 @@ public class UserService {
         if (!user.get().getIsActive()) {
             throw new BadRequestException("User doesn't active");
         }
+    }
+
+    public  Set<Role> setRoles(Long roleId){
+        Set<Role>role = new HashSet<>();
+       Role adminRole= roleRepository.findByName(RoleType.ROLE_ADMIN).orElseThrow(()->new ResourceNotFoundException(ErrorMessage.ROLE_NOT_FOUND_MESSAGE));
+       Role staffRole= roleRepository.findByName(RoleType.ROLE_STAFF).orElseThrow(()->new ResourceNotFoundException(ErrorMessage.ROLE_NOT_FOUND_MESSAGE));
+       Role memberRole= roleRepository.findByName(RoleType.ROLE_MEMBER).orElseThrow(()->new ResourceNotFoundException(ErrorMessage.ROLE_NOT_FOUND_MESSAGE));
+        if (roleId==1){
+            role.add(adminRole);
+        }else if (roleId==2){
+            role.add(staffRole);
+        }else{
+            role.add(memberRole);
+        }
+        return role;
     }
 
 }
