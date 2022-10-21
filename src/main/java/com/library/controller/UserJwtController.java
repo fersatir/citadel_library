@@ -1,7 +1,5 @@
 package com.library.controller;
 
-
-
 import com.library.dto.UserDTO;
 import com.library.dto.requests.LoginRequest;
 import com.library.dto.requests.RegisterRequest;
@@ -44,7 +42,6 @@ public class UserJwtController {
     public ResponseEntity<LoginResponse> login (@Valid @RequestBody LoginRequest loginRequest){
 
         Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),loginRequest.getPassword()));
-        userService.emailToUser(loginRequest.getEmail());
         String token = jwtUtils.generateToken(authentication);
 
         LoginResponse response = new LoginResponse();

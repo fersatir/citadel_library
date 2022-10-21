@@ -191,37 +191,6 @@ public class UserService {
         return userMapper.userToUserDTO(updateUser);
     }
 
-    private Set<Role> convertRoles(Set<String> userStrRoles) {
-
-        Set<Role> roles = new HashSet<>();
-
-        if (userStrRoles == null) {
-            Role userRole = roleRepository.findByName(RoleType.ROLE_MEMBER).orElseThrow(() ->
-                    new ResourceNotFoundException(String.format(ErrorMessage.ROLE_NOT_FOUND_MESSAGE, RoleType.ROLE_MEMBER.name())));
-            roles.add(userRole);
-        } else {
-            userStrRoles.forEach(role -> {
-                switch (role) {
-                    case "Administrator":
-                        Role adminRole = roleRepository.findByName(RoleType.ROLE_ADMIN).orElseThrow(() ->
-                                new ResourceNotFoundException(String.format(ErrorMessage.ROLE_NOT_FOUND_MESSAGE, RoleType.ROLE_ADMIN.name())));
-                        roles.add(adminRole);
-                        break;
-                    case "Staff":
-                        Role staffRole = roleRepository.findByName(RoleType.ROLE_STAFF).orElseThrow(() ->
-                                new ResourceNotFoundException(String.format(ErrorMessage.ROLE_NOT_FOUND_MESSAGE, RoleType.ROLE_STAFF.name())));
-                        roles.add(staffRole);
-                        break;
-                    default:
-                        Role userRole = roleRepository.findByName(RoleType.ROLE_MEMBER).orElseThrow(() ->
-                                new ResourceNotFoundException(String.format(ErrorMessage.ROLE_NOT_FOUND_MESSAGE, RoleType.ROLE_MEMBER.name())));
-                        roles.add(userRole);
-                }
-            });
-        }
-        return roles;
-    }
-
     public UserDTO updateUser(Long id, UserUpdateRequest request) {
         boolean existEmail = userRepository.existsByEmail(request.getEmail());
 
@@ -279,13 +248,6 @@ public class UserService {
         }
 
         return authUserLoans;
-    }
-
-    public void emailToUser(String email) {
-        Optional<User> user = userRepository.findByEmail(email);
-        if (!user.get().getIsActive()) {
-            throw new BadRequestException("User doesn't active");
-        }
     }
 
     public  Set<Role> setRoles(Long roleId){

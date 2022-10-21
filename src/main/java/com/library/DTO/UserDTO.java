@@ -1,7 +1,6 @@
 package com.library.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.library.domain.Loan;
 import com.library.domain.Role;
 import com.library.domain.User;
 import com.library.domain.enums.RoleType;
