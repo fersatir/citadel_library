@@ -14,9 +14,11 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-   Optional <User> findByEmail(String email);
-    Boolean existsByEmail(String email);
 
+
+    Optional <User> findByEmail(String email);
+
+    Boolean existsByEmail(String email);
     @Query("Select u from User u where u.isActive=true")
     List<User> findAll();
     @Query("select u from User u where u.id=:id and u.isActive=true ")
@@ -25,16 +27,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select new com.library.dto.UserDTO(user) from User user where user.isActive=true and (user.firstName= :query or user.lastName= :query or user.email= :query or user.phone= :query or :query is null)")
     Page<UserDTO> findUsersQueryOptionalSearchWithPage(@Param("query") Optional<String> query, Pageable pageable);
 
-  //  @Query("select new com.library.dto.UserDTO(user) from User user where user.isActive=true")
-  //  Page<UserDTO> findUserWithPage(Pageable pageable);
-
-
-   /* @Modifying
-    @Query("UPDATE User u SET u.firstName=:firstName, u.lastName=:lastName, u.phone=:phone, u.email=:email," +
-            "u.address=:address,u.birthDate=:birthDate, u.resetPasswordCode=:resetPasswordCode WHERE u.id=:id")
-    void update(@Param("id") Long id, @Param("firstName") String firstName, @Param("lastName") String lastName,
-                @Param("phone") String phone, @Param("email") String email, @Param("address") String address,
-                @Param("birthDate") Date birthDate, @Param("resetPasswordCode") String resetPasswordCode);
-*/
 }
 

@@ -2,7 +2,8 @@ package com.library.security.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.library.domain.User;
-import com.library.repository.UserRepository;
+import com.library.exception.BadRequestException;
+import com.library.exception.message.ErrorMessage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -71,7 +72,7 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public boolean isEnabled() {
         if (!isActive){
-            throw new RuntimeException("deneme");
+            throw new BadRequestException("User account not found");
         }
         return true;}
 }

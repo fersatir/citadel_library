@@ -1,6 +1,6 @@
 package com.library.dto;
 
-import com.library.domain.Loan;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.library.domain.Role;
 import com.library.domain.User;
 import com.library.domain.enums.RoleType;
@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
@@ -28,34 +29,39 @@ public class UserDTO {
     private Date birthDate;
     private String email;
     private LocalDateTime createDate;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String resetPasswordCode;
 
-    private Boolean isActive=true;
+    private Boolean isActive = true;
     private Boolean builtIn = false;
     private Set<String> roles;
 
-    public  void setRoles(Set<Role> roles){
-        Set<String> rolesStr= new HashSet<>();
+    public void setRoles(Set<Role> roles) {
+        Set<String> rolesStr = new HashSet<>();
 
-        roles.forEach(r->  {
-            if (r.getName().equals(RoleType.ROLE_ADMIN)){ rolesStr.add("Administrator");}
-            else if (r.getName().equals(RoleType.ROLE_STAFF)) {rolesStr.add("Staff");}
-            else  {rolesStr.add("Member");}
+        roles.forEach(r -> {
+            if (r.getName().equals(RoleType.ROLE_ADMIN)) {
+                rolesStr.add("Administrator");
+            } else if (r.getName().equals(RoleType.ROLE_STAFF)) {
+                rolesStr.add("Staff");
+            } else {
+                rolesStr.add("Member");
+            }
         });
-        this.roles=rolesStr;
+        this.roles = rolesStr;
     }
 
-    public UserDTO (User user){
-        this.id=user.getId();
-        this.firstName=user.getFirstName();
-        this.lastName=user.getLastName();
-        this.score=user.getScore();
-        this.address=user.getAddress();
-        this.phone=user.getPhone();
-        this.birthDate=user.getBirthDate();
-        this.email=user.getEmail();
-        this.createDate=user.getCreateDate();
-        this.resetPasswordCode=user.getResetPasswordCode();
-        this.isActive=user.getIsActive();
+    public UserDTO(User user) {
+        this.id = user.getId();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.score = user.getScore();
+        this.address = user.getAddress();
+        this.phone = user.getPhone();
+        this.birthDate = user.getBirthDate();
+        this.email = user.getEmail();
+        this.createDate = user.getCreateDate();
+        this.resetPasswordCode = user.getResetPasswordCode();
+        this.isActive = user.getIsActive();
     }
 }

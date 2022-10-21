@@ -33,6 +33,7 @@ public class UserController {
     private UserService userService;
 
 
+    // http://localhost:8080/users/add Admin veya employee create user
     @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     @PostMapping("/add")
     public ResponseEntity<UserCreateDTO> createUser(@Valid @RequestBody UserCreateDTO userCreateDTO,HttpServletRequest request){
@@ -50,6 +51,8 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
+
+   // http://localhost:8080/users  It will return the authenticatedauthenticated user object
     @GetMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF') or hasRole('MEMBER')")
     public ResponseEntity<UserDTO> getUserById(HttpServletRequest request){
@@ -58,6 +61,8 @@ public class UserController {
       return ResponseEntity.ok(userDTO);
     }
 
+
+     // http://localhost:8080/users/4  admin or staff can return user object with user id
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     public ResponseEntity<UserDTO> getUserByIdAdmin(@PathVariable Long id){
@@ -65,6 +70,8 @@ public class UserController {
     return ResponseEntity.ok(userDTO);
     }
 
+
+   // http://localhost:8080/users/page?search=167-675-4443
     @GetMapping("/page")
     @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     public ResponseEntity<Page<UserDTO>> getAllUsersPage(@RequestParam(required = false,value = "search")Optional <String> query,
@@ -78,7 +85,8 @@ public class UserController {
         return ResponseEntity.ok(userDTOPage);
     }
 
-
+    // http://localhost:8080/users/loans  -
+    //It will return the authenticated user object it should return the corresponding book object in response
     @GetMapping("/loans")
     @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF') or hasRole('MEMBER')")
     public ResponseEntity<Page<UserLoansResponse>> getUserLoansPage(@RequestParam(required = false, value = "page",defaultValue = "0") int page,
@@ -93,7 +101,7 @@ public class UserController {
 
 
     }
-
+    // http://localhost:8080/users/delete/43
     @PutMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDTO> deleteUser(@PathVariable  Long id){
@@ -102,7 +110,8 @@ public class UserController {
         return ResponseEntity.ok(userDTO);
     }
 
-
+    // http://localhost:8080/users/2 -
+    //It will return the updated user object admin can update any type of user,while an employee can update only member-type users.
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     public ResponseEntity<UserDTO>  updateUserByAdminOrStaff(HttpServletRequest request,@PathVariable Long id, @Valid @RequestBody AdminUpdateUserRequest adminUpdateUserRequest){
@@ -111,6 +120,7 @@ public class UserController {
 
        return ResponseEntity.ok(userDTO);
     }
+
 
     @PatchMapping
     @PreAuthorize("hasRole('MEMBER')")
@@ -125,6 +135,7 @@ public class UserController {
     public ResponseEntity<CLResponse> updatePassword (HttpServletRequest request, @RequestBody UpdatePasswordRequest passwordRequest){
       Long id = (Long) request.getAttribute("id");
       userService.updatePassword(id,passwordRequest);
+
 
       CLResponse response = new CLResponse();
       response.setMessage("Password has changed");
