@@ -24,15 +24,10 @@ import java.util.Optional;
 public class BookService {
 
     BookRepository bookRepository;
-
     AuthorRepository authorRepository;
-
     CategoryRepository categoryRepository;
-
     PublisherRepository publisherRepository;
     BookMapper bookMapper;
-
-    LoanRepository loanRepository;
 
 
     public BookDTO getOneBookById(Long id) {

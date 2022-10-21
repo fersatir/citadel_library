@@ -31,7 +31,7 @@ public class BookDTO {
     @NotNull(message="Please provide publish date")
     private Integer publishDate;
 
-    private File image;
+    String imageId;
 
     private Boolean loanable = true;
 
@@ -52,6 +52,7 @@ public class BookDTO {
     @NotNull(message="Please provide create author")
     private Long author_id;
 
+    private String image_id;
     @NotNull(message="Please provide create category")
     private Long category_id;
 
@@ -64,7 +65,7 @@ public class BookDTO {
         this.isbn = book.getIsbn();
         this.pageCount = book.getPageCount();
         this.publishDate = book.getPublishDate();
-        this.image = book.getImage();
+        this.imageId = book.getImage().getId();
         this.loanable = book.getLoanable();
         this.shelfCode = book.getShelfCode();
         this.active = book.getActive();

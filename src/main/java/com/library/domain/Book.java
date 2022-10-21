@@ -9,6 +9,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -32,8 +33,6 @@ public class Book {
     @Column(nullable = false)
     private Integer publishDate;
 
-    private File image;
-
     @Column(nullable = false)
     private Boolean loanable = true;
 
@@ -52,6 +51,11 @@ public class Book {
     @Column(nullable = false)
     private Boolean builtIn = false;
 
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "image_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private ImageFile image;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -67,12 +71,11 @@ public class Book {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Publisher publisher;
 
-    public Book(String name, String isbn, Integer pageCount, Integer publishDate, File image, Boolean loanable, String shelfCode, Boolean active, Boolean featured, LocalDateTime createDate, Boolean builtIn, Author author, Category category, Publisher publisher) {
+    public Book(String name, String isbn, Integer pageCount, Integer publishDate, Boolean loanable, String shelfCode, Boolean active, Boolean featured, LocalDateTime createDate, Boolean builtIn, Author author, Category category, Publisher publisher) {
         this.name = name;
         this.isbn = isbn;
         this.pageCount = pageCount;
         this.publishDate = publishDate;
-        this.image = image;
         this.loanable = loanable;
         this.shelfCode = shelfCode;
         this.active = active;
