@@ -285,11 +285,4 @@ public class UserService {
         return authUserLoans;
     }
 
-    public void emailToUser(String email) {
-        Optional<User> user = userRepository.findByEmail(email);
-        if (!user.get().getIsActive()) {
-            throw new BadRequestException("User doesn't active");
-        }
-    }
-
 }

@@ -2,6 +2,7 @@ package com.library.security.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.library.domain.User;
+import com.library.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,6 +24,8 @@ public class UserDetailsImpl implements UserDetails {
     private Long id;
     private String email;
 
+    private Boolean isActive;
+
     @JsonIgnore
     private String password;
 
@@ -31,7 +34,7 @@ public class UserDetailsImpl implements UserDetails {
 
     public static UserDetailsImpl build(User user){
       List<GrantedAuthority> authorities = user.getRoles().stream().map(role->new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
-        return  new UserDetailsImpl(user.getId(), user.getEmail(), user.getPassword(),authorities);
+        return  new UserDetailsImpl(user.getId(), user.getEmail(),user.getIsActive(), user.getPassword(),authorities);
     }
 
 
@@ -67,6 +70,8 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
-    }
+        if (!isActive){
+            throw new RuntimeException("deneme");
+        }
+        return true;}
 }

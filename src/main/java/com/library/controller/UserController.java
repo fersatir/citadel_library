@@ -9,10 +9,6 @@ import com.library.dto.requests.UpdatePasswordRequest;
 import com.library.dto.requests.UserUpdateRequest;
 import com.library.dto.response.CLResponse;
 import com.library.dto.response.UserLoansResponse;
-<<<<<<< HEAD
-=======
-import com.library.dto.requests.UpdatePasswordRequest;
->>>>>>> master
 import com.library.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
