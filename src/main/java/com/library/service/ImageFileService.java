@@ -21,7 +21,7 @@ public class ImageFileService {
 
 	public String saveImage(MultipartFile file) {
 		     String fileName= StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-		     ImageFile imageFile=null;
+		     ImageFile imageFile;
 			try {
 				imageFile = new ImageFile(fileName, file.getContentType(), file.getBytes());
 			} catch (IOException e) {

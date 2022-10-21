@@ -42,6 +42,7 @@ public class BookDTO {
     private Boolean builtIn = false;
     @NotNull(message="Please provide create author")
     private Long author_id;
+
     private String image_id;
     @NotNull(message="Please provide create category")
     private Long category_id;

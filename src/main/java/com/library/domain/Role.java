@@ -24,7 +24,4 @@ public class Role {
     @Column(nullable = false)
     private RoleType name;
 
-    public Role(RoleType name) {
-        this.name = name;
-    }
 }
