@@ -51,7 +51,7 @@ public class RegisterRequest {
     private String password;
 
     @NotNull(message="Please provide createDate")
-    private LocalDateTime createDate;
+    private LocalDateTime createDate = LocalDateTime.now();
     @NotNull
     private Boolean isActive=true;
 

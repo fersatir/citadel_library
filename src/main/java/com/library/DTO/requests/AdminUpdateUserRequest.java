@@ -53,7 +53,7 @@ public class AdminUpdateUserRequest {
     private String password;
 
     @NotNull(message="Please provide createDate")
-    private LocalDateTime createDate;
+    private LocalDateTime createDate = LocalDateTime.now();
 
     private String resetPasswordCode;
 
