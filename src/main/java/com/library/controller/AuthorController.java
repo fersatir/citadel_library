@@ -1,6 +1,7 @@
 package com.library.controller;
 
 import com.library.domain.Author;
+import com.library.dto.BookDTO;
 import com.library.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/authors")
@@ -30,6 +32,14 @@ public class AuthorController {
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction,prop));
         Page<Author> authorPage = authorService.getAllAuthorsWithPage(pageable);
         return new ResponseEntity<>(authorPage, HttpStatus.OK);
+    }
+
+    @GetMapping("/allauthors")
+    public ResponseEntity<List<Author>> getAll(){
+
+        List<Author> authors = authorService.findAll();
+
+        return new ResponseEntity<>(authors,HttpStatus.OK);
     }
 
     /* Get One Author with Author Id */

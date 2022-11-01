@@ -15,7 +15,7 @@ import java.util.Optional;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-    @Query("SELECT new com.library.dto.BookDTO(book) from Book book where book.active = true and (book.name = :query or book.author.name = :query or book.isbn =:query or :query is null ) and (book.category.id = :cat or :cat is null ) and (book.author.id = :author or :author is null ) and (book.publisher.id = :publisher or :publisher is null )")
+    @Query("SELECT new com.library.dto.BookDTO(book) from Book book where book.active = true and ((book.name = :query or book.author.name = :query or book.isbn =:query or :query is null ) or (book.category.id = :cat or :cat is null ) or (book.author.id = :author or :author is null ) or (book.publisher.id = :publisher or :publisher is null ))")
     Page<BookDTO> findByQueryAndCatAndAuthorAndPublisherWithPage(@Param("query") Optional<String> query,
                                                                  @Param("cat") Optional<Long> cat,
                                                                  @Param("author") Optional<Long> author,
@@ -32,5 +32,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("SELECT b FROM Book b WHERE b.author.id = ?1")
     List<Book> existsBookAuthorId(Long id);
+
+    @Query("SELECT new com.library.dto.BookDTO(book) from Book book where book.active = true")
+    List<BookDTO> findAllDTO();
 
 }

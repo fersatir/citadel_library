@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -48,6 +49,14 @@ public class BookController {
         Page<BookDTO> bookPage = bookService.findAllWithPage(p, categortyId, authorId, publisherId,pageable);
 
         return new ResponseEntity<>(bookPage,HttpStatus.OK);
+    }
+
+    @GetMapping("/allbooks")
+    public ResponseEntity<List<BookDTO>> getAll(){
+
+        List<BookDTO> books = bookService.findAll();
+
+        return new ResponseEntity<>(books,HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

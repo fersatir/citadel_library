@@ -1,5 +1,6 @@
 package com.library.controller;
 
+import com.library.domain.Author;
 import com.library.domain.Category;
 import com.library.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/categories")
@@ -35,6 +37,14 @@ public class CategoryController {
         Page<Category> catetegoryPage = categoryService.getAllWithPage(pageable);
 
         return ResponseEntity.ok(catetegoryPage);
+    }
+
+    @GetMapping("/allcategories")
+    public ResponseEntity<List<Category>> getAll(){
+
+        List<Category> categories = categoryService.findAll();
+
+        return new ResponseEntity<>(categories,HttpStatus.OK);
     }
 
     //Get Category With Id
