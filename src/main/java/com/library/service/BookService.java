@@ -3,6 +3,7 @@ package com.library.service;
 import com.library.domain.*;
 import com.library.dto.BookDTO;
 import com.library.dto.mapper.BookMapper;
+import com.library.dto.response.UserLoansResponse;
 import com.library.exception.BadRequestException;
 import com.library.exception.ResourceNotFoundException;
 import com.library.exception.message.ErrorMessage;
@@ -116,5 +117,12 @@ public class BookService {
     public List<BookDTO> findAll() {
       List<BookDTO> booksList = bookRepository.findAllDTO();
       return booksList;
+    }
+
+    public Page<BookDTO> getAllBooksWithPage(Pageable pageable) {
+
+       Page<BookDTO> books = bookRepository.findAllWithPage(pageable);
+
+       return books;
     }
 }

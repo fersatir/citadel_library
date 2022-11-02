@@ -36,4 +36,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("SELECT new com.library.dto.BookDTO(book) from Book book where book.active = true")
     List<BookDTO> findAllDTO();
 
+    @Query("SELECT new com.library.dto.BookDTO(book) from Book book where book.active = true")
+    Page<BookDTO> findAllWithPage(Pageable pageable);
 }

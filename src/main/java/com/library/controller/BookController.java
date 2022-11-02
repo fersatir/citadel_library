@@ -1,5 +1,6 @@
 package com.library.controller;
 
+import com.library.domain.Author;
 import com.library.domain.Book;
 import com.library.dto.BookDTO;
 import com.library.service.BookService;
@@ -57,6 +58,17 @@ public class BookController {
         List<BookDTO> books = bookService.findAll();
 
         return new ResponseEntity<>(books,HttpStatus.OK);
+    }
+
+    @GetMapping("/bookspages")
+    public ResponseEntity<Page<BookDTO>>  getAllBooksWithPage(@RequestParam(required = false,value = "page", defaultValue = "0") int page,
+                                                      @RequestParam(required = false,value = "size", defaultValue = "20") int size,
+                                                      @RequestParam(required = false,value = "sort", defaultValue = "name") String prop,
+                                                      @RequestParam(required = false,value = "direction", defaultValue = "ASC") Sort.Direction direction){
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction,prop));
+        Page<BookDTO> booksPage = bookService.getAllBooksWithPage(pageable);
+        return new ResponseEntity<>(booksPage, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
