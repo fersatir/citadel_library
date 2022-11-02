@@ -33,6 +33,10 @@ public class BookService {
                 (String.format(ErrorMessage.BOOK_NOT_FOUND_MESSAGE, id)));
 
         BookDTO bookDTO = bookMapper.bookToBookDTO(book);
+        bookDTO.setPublisher_id(book.getPublisher().getId());
+        bookDTO.setAuthor_id(book.getAuthor().getId());
+        bookDTO.setCategory_id(book.getCategory().getId());
+        bookDTO.setImage_id(book.getImage().getId());
 
         return bookDTO;
     }

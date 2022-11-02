@@ -43,7 +43,7 @@ public class AuthorController {
     }
 
     /* Get One Author with Author Id */
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<Author> getAuthorById(@PathVariable Long id){
         Author author = authorService.getAuthorById(id);
         return new ResponseEntity<>(author,HttpStatus.OK);
