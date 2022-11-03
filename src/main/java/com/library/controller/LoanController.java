@@ -44,7 +44,7 @@ public class LoanController {
                                                           @RequestParam(required = false, value = "page", defaultValue = "0") int page,
                                                           @RequestParam(required = false,value = "size", defaultValue = "20") int size,
                                                           @RequestParam(required = false,value = "sort", defaultValue = "loanDate") String prop,
-                                                          @RequestParam(required = false,value = "type", defaultValue = "DESC") Sort.Direction type){
+                                                          @RequestParam(required = false,value = "direction", defaultValue = "DESC") Sort.Direction type){
 
         Pageable pageable = PageRequest.of(page,size,Sort.by(type,prop));
         Long idLogin = (Long) request.getAttribute("id");
@@ -71,7 +71,7 @@ public class LoanController {
                                                                @RequestParam(required = false, value = "page", defaultValue = "0") int page,
                                                                @RequestParam(required = false,value = "size", defaultValue = "20") int size,
                                                                @RequestParam(required = false,value = "sort", defaultValue = "loanDate") String prop,
-                                                               @RequestParam(required = false,value = "type", defaultValue = "DESC") Sort.Direction type){
+                                                               @RequestParam(required = false,value = "direction", defaultValue = "DESC") Sort.Direction type){
 
         Pageable pageable = PageRequest.of(page,size,Sort.by(type,prop));
         Page<LoanResponse> loanSpecifiedUser = loanService.getLoansSpecifiedUserById(pageable,id);
@@ -86,7 +86,7 @@ public class LoanController {
                                                                @RequestParam(required = false, value = "page", defaultValue = "0") int page,
                                                                @RequestParam(required = false,value = "size", defaultValue = "20") int size,
                                                                @RequestParam(required = false,value = "sort", defaultValue = "loanDate") String prop,
-                                                               @RequestParam(required = false,value = "type", defaultValue = "DESC") Sort.Direction type){
+                                                               @RequestParam(required = false,value = "direction", defaultValue = "DESC") Sort.Direction type){
 
         Pageable pageable = PageRequest.of(page,size,Sort.by(type,prop));
         Page<LoanResponseBook> loanSpecifiedUser = loanService.getLoansSpecifiedBookById(pageable,id);
