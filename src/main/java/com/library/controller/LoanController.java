@@ -3,6 +3,7 @@ package com.library.controller;
 import com.library.domain.Category;
 import com.library.domain.Loan;
 import com.library.dto.LoanDTO;
+import com.library.dto.requests.LoanReturnRequest;
 import com.library.dto.requests.LoanUpdateRequest;
 import com.library.dto.response.LoanResponse;
 import com.library.dto.response.LoanResponseBook;
@@ -114,4 +115,5 @@ public class LoanController {
 
         return ResponseEntity.ok(loanUpdate);
     }
+
 }

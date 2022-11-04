@@ -142,8 +142,6 @@ public class LoanService {
         return authUserLoans;
     }
 
-
-
     public LoanResponse getAuthenticatedUserLoanWithId(Long idLogin, Long id) {
         User user= userRepository.findById(idLogin).orElseThrow(()->
                 new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, idLogin)));
@@ -196,8 +194,6 @@ public class LoanService {
         User user= userRepository.findById(loan.getUser().getId()).orElseThrow(()->
                 new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, id)));
 
-        loan.setNotes(loanUpdateRequest.getNotes());
-        loan.setExpireDate(loanUpdateRequest.getExpireDate());
         loan.setReturnDate(loanUpdateRequest.getReturnDate());
         loanRepository.save(loan);
 
@@ -219,7 +215,7 @@ public class LoanService {
         loanUpdateResponse.setNotes(loan.getNotes());
         loanUpdateResponse.setReturnDate(loan.getReturnDate());
 
-
         return loanUpdateResponse;
     }
+
 }

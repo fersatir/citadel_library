@@ -36,6 +36,7 @@ public class ReportController {
     }
 
     //Most popular Books
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     @GetMapping()
     public ResponseEntity<Page<ReportMostPopularBookDTO>> getMostPopularBooksWithPage( @RequestParam(required = false, value = "page", defaultValue = "0") int page,
                                                                                        @RequestParam(required = false,value = "size", defaultValue = "20") int size
@@ -46,6 +47,7 @@ public class ReportController {
         return ResponseEntity.ok(mostPopularBook);
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     @GetMapping("/expired-books")
     public ResponseEntity<Page<BookDTO>> getExpiredBooks(@RequestParam(required = false, value = "page", defaultValue = "0") int page,
                                                             @RequestParam(required = false,value = "size", defaultValue = "20") int size){
@@ -56,6 +58,7 @@ public class ReportController {
         return ResponseEntity.ok(unreturned);
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     @GetMapping("/unreturned-books")
     public ResponseEntity<Page<BookDTO>> getUnreturnedBooks(@RequestParam(required = false, value = "page", defaultValue = "0") int page,
                                                          @RequestParam(required = false,value = "size", defaultValue = "20") int size){
@@ -66,7 +69,7 @@ public class ReportController {
         return ResponseEntity.ok(unreturned);
     }
 
-
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     @GetMapping("/most-borrowers")
     public ResponseEntity<Page<ReportMostBorrowersDTO>> getMostBorrowers(@RequestParam(required = false, value = "page", defaultValue = "0") int page,
                                                                          @RequestParam(required = false,value = "size", defaultValue = "20") int size)
