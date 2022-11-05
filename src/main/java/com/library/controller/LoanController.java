@@ -3,7 +3,6 @@ package com.library.controller;
 import com.library.domain.Category;
 import com.library.domain.Loan;
 import com.library.dto.LoanDTO;
-import com.library.dto.requests.LoanReturnRequest;
 import com.library.dto.requests.LoanUpdateRequest;
 import com.library.dto.response.LoanResponse;
 import com.library.dto.response.LoanResponseBook;
@@ -30,6 +29,7 @@ public class LoanController {
 
     private LoanService loanService;
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     @PostMapping("/add")
     public ResponseEntity<LoanDTO> createLoan(@Valid @RequestBody LoanDTO loanDTO){
 
@@ -45,9 +45,9 @@ public class LoanController {
                                                           @RequestParam(required = false, value = "page", defaultValue = "0") int page,
                                                           @RequestParam(required = false,value = "size", defaultValue = "20") int size,
                                                           @RequestParam(required = false,value = "sort", defaultValue = "loanDate") String prop,
-                                                          @RequestParam(required = false,value = "direction", defaultValue = "DESC") Sort.Direction type){
+                                                          @RequestParam(required = false,value = "direction", defaultValue = "DESC") Sort.Direction direction){
 
-        Pageable pageable = PageRequest.of(page,size,Sort.by(type,prop));
+        Pageable pageable = PageRequest.of(page,size,Sort.by(direction,prop));
         Long idLogin = (Long) request.getAttribute("id");
         Page<LoanResponse> loanAutUser = loanService.getAuthenticatedUserLoans(pageable,idLogin);
 
@@ -72,9 +72,9 @@ public class LoanController {
                                                                @RequestParam(required = false, value = "page", defaultValue = "0") int page,
                                                                @RequestParam(required = false,value = "size", defaultValue = "20") int size,
                                                                @RequestParam(required = false,value = "sort", defaultValue = "loanDate") String prop,
-                                                               @RequestParam(required = false,value = "direction", defaultValue = "DESC") Sort.Direction type){
+                                                               @RequestParam(required = false,value = "direction", defaultValue = "DESC") Sort.Direction direction){
 
-        Pageable pageable = PageRequest.of(page,size,Sort.by(type,prop));
+        Pageable pageable = PageRequest.of(page,size,Sort.by(direction,prop));
         Page<LoanResponse> loanSpecifiedUser = loanService.getLoansSpecifiedUserById(pageable,id);
 
         return ResponseEntity.ok(loanSpecifiedUser);
@@ -87,9 +87,9 @@ public class LoanController {
                                                                @RequestParam(required = false, value = "page", defaultValue = "0") int page,
                                                                @RequestParam(required = false,value = "size", defaultValue = "20") int size,
                                                                @RequestParam(required = false,value = "sort", defaultValue = "loanDate") String prop,
-                                                               @RequestParam(required = false,value = "direction", defaultValue = "DESC") Sort.Direction type){
+                                                               @RequestParam(required = false,value = "direction", defaultValue = "DESC") Sort.Direction direction){
 
-        Pageable pageable = PageRequest.of(page,size,Sort.by(type,prop));
+        Pageable pageable = PageRequest.of(page,size,Sort.by(direction,prop));
         Page<LoanResponseBook> loanSpecifiedUser = loanService.getLoansSpecifiedBookById(pageable,id);
 
         return ResponseEntity.ok(loanSpecifiedUser);
@@ -108,12 +108,12 @@ public class LoanController {
 
     //It will update the loan
     @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
-    @PutMapping("/{id}")
-    public ResponseEntity<LoanUpdateResponse> updateLoan(@PathVariable Long id, @Valid @RequestBody LoanUpdateRequest loanUpdateRequest){
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<LoanUpdateResponse> deleteLoan(@PathVariable Long id){
 
-        LoanUpdateResponse loanUpdate = loanService.updateLoan(id,loanUpdateRequest);
+        LoanUpdateResponse loanDelete = loanService.deleteLoan(id);
 
-        return ResponseEntity.ok(loanUpdate);
+        return ResponseEntity.ok(loanDelete);
     }
 
 }

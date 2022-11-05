@@ -48,7 +48,7 @@ public interface LoanRepository extends JpaRepository<Loan,Long> {
             "max(l.book.pageCount), count(l.book.id)) from Loan l  group by l.book.id order by count(l.book.id) desc ")
   Page<ReportMostPopularBookDTO> mostPopulars(Pageable pageable);
 
-    @Query("SELECT new com.library.dto.BookDTO(l.book) from Loan l where (l.returnDate is null and l.expireDate < :date)")
+    @Query("SELECT new com.library.dto.BookDTO(l.book) from Loan l where (l.returnDate is null or l.expireDate < :date)")
     Page<BookDTO> unreturned(Pageable pageable, LocalDateTime date);
 
   @Query("SELECT new com.library.dto.BookDTO(l.book) from Loan l where l.expireDate < :date")
@@ -57,4 +57,7 @@ public interface LoanRepository extends JpaRepository<Loan,Long> {
     @Query("SELECT new com.library.dto.ReportMostBorrowersDTO(max(l.user.id), max(l.user.firstName), max(l.user.lastName), " +
             "max(l.user.score), max(l.user.phone), max(l.user.email),count(l.user.id)) from Loan l  group by l.user.id order by count(l.user.id) desc ")
   Page<ReportMostBorrowersDTO> mostBorrowers(Pageable pageable);
+
+  @Query("SELECT count(u) FROM Loan u WHERE u.returnDate is null")
+  Integer  getUnReturnedBooks();
 }

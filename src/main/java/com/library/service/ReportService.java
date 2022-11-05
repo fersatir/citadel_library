@@ -25,6 +25,7 @@ public class ReportService {
         int publishers = publisherRepository.findAll().size();
         int categories = categoryRepository.findAll().size();
         int loans = loanRepository.findAll().size();
+        int unReturnBook = loanRepository.getUnReturnedBooks();
 
         ReportStatisticDTO statistics = new ReportStatisticDTO();
 
@@ -33,6 +34,7 @@ public class ReportService {
         statistics.setPublisherNumber(publishers);
         statistics.setCategoryNumber(categories);
         statistics.setLoansNumber(loans);
+        statistics.setBookNotReturnNumber(unReturnBook);
 
         return statistics;
     }

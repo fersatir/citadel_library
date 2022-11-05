@@ -61,12 +61,14 @@ public class LoanService {
         Loan loan = new Loan();
         loan.setUser(user);
         loan.setBook(book);
+        loan.setNotes(loanDTO.getNotes());
         loan.setExpireDate(ld.plusDays(calculateDay(user.getScore())));
         loan.setLoanDate(ld);
 
        loanRepository.save(loan);
 
        loanDTO.setId(loan.getId());
+       loanDTO.setNotes(loan.getNotes());
        loanDTO.setExpireDate(loan.getExpireDate());
        book.setLoanable(false);
        bookRepository.save(book);
@@ -183,7 +185,7 @@ public class LoanService {
 
 
 
-    public LoanUpdateResponse updateLoan(Long id, LoanUpdateRequest loanUpdateRequest) {
+    public LoanUpdateResponse deleteLoan(Long id) {
 
         Loan loan = loanRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException
                 (String.format(ErrorMessage.LOAN_NOT_FOUND_MESSAGE, id)));
@@ -194,7 +196,7 @@ public class LoanService {
         User user= userRepository.findById(loan.getUser().getId()).orElseThrow(()->
                 new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, id)));
 
-        loan.setReturnDate(loanUpdateRequest.getReturnDate());
+        loan.setReturnDate(LocalDateTime.now());
         loanRepository.save(loan);
 
         book.setLoanable(true);
