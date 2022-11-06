@@ -45,7 +45,7 @@ public interface LoanRepository extends JpaRepository<Loan,Long> {
     Page<UserLoansResponse> getAuthUserLoans(Long id,Pageable pageable);
 
     @Query("SELECT new com.library.dto.ReportMostPopularBookDTO(max(l.book.id), max(l.book.name), max(l.book.isbn), " +
-            "max(l.book.pageCount), count(l.book.id)) from Loan l  group by l.book.id order by count(l.book.id) desc ")
+            "max(l.book.pageCount), count(l.book.id),max(l.book.author.name),max(l.book.image.id)) from Loan l  group by l.book.id order by count(l.book.id) desc ")
   Page<ReportMostPopularBookDTO> mostPopulars(Pageable pageable);
 
     @Query("SELECT new com.library.dto.BookDTO(l.book) from Loan l where (l.returnDate is null or l.expireDate < :date)")

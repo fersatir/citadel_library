@@ -36,7 +36,7 @@ public class ReportController {
     }
 
     //Most popular Books
-    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
+
     @GetMapping()
     public ResponseEntity<Page<ReportMostPopularBookDTO>> getMostPopularBooksWithPage( @RequestParam(required = false, value = "page", defaultValue = "0") int page,
                                                                                        @RequestParam(required = false,value = "size", defaultValue = "20") int size
