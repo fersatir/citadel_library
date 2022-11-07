@@ -18,6 +18,8 @@ public class ReportService {
     CategoryRepository categoryRepository;
     LoanRepository loanRepository;
 
+    UserRepository userRepository;
+
     public ReportStatisticDTO getAllStatistic() {
 
         int books = bookRepository.findAll().size();
@@ -26,6 +28,9 @@ public class ReportService {
         int categories = categoryRepository.findAll().size();
         int loans = loanRepository.findAll().size();
         int unReturnBook = loanRepository.getUnReturnedBooks();
+        int members = userRepository.findAll().size();
+        int expired = loanRepository.getExpiredBooks(LocalDateTime.now());
+
 
         ReportStatisticDTO statistics = new ReportStatisticDTO();
 
@@ -35,6 +40,8 @@ public class ReportService {
         statistics.setCategoryNumber(categories);
         statistics.setLoansNumber(loans);
         statistics.setBookNotReturnNumber(unReturnBook);
+        statistics.setMembersNumber(members);
+        statistics.setExpiredBookNumber(expired);
 
         return statistics;
     }

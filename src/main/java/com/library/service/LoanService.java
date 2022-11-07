@@ -46,7 +46,7 @@ public class LoanService {
                 (String.format(ErrorMessage.BOOK_NOT_FOUND_MESSAGE, loanDTO.getBookId())));
       Boolean isLoanable =  book.getLoanable();
         if(!isLoanable){
-            throw new BadRequestException("kitap alamazsın müsait değil.");
+            throw new BadRequestException("Book not available.");
         }
 
         User user= userRepository.findById(loanDTO.getUserId()).orElseThrow(()->
@@ -104,9 +104,9 @@ public class LoanService {
                 sayac++;
                 Boolean expired =  l.getExpireDate().isBefore(ld);
                 if(expired){
-                    throw new BadRequestException("Aldığınız kitabın iade tarihi geciktiğin için kitap alamazsın.");
+                    throw new BadRequestException("Your book has expired date, can not borrow book.");
                 }else if(sayac>=maxBookLoan){
-                    throw new BadRequestException("Kitap alma kotanızı doldurdunuz, Yeni kitap almak için elinizdekilerden iade etmelisiniz.");
+                    throw new BadRequestException("Reached Your Book Quota.");
                 }
             }
         }

@@ -1,9 +1,6 @@
 package com.library.controller;
 
-import com.library.domain.Category;
-import com.library.domain.Loan;
 import com.library.dto.LoanDTO;
-import com.library.dto.requests.LoanUpdateRequest;
 import com.library.dto.response.LoanResponse;
 import com.library.dto.response.LoanResponseBook;
 import com.library.dto.response.LoanResponseBookUser;
@@ -108,8 +105,8 @@ public class LoanController {
 
     //It will update the loan
     @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<LoanUpdateResponse> deleteLoan(@PathVariable Long id){
+    @PutMapping("/update/{id}")
+    public ResponseEntity<LoanUpdateResponse> deleteLoan(@PathVariable Long id, String update){
 
         LoanUpdateResponse loanDelete = loanService.deleteLoan(id);
 

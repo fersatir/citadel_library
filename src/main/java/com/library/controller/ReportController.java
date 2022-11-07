@@ -27,7 +27,7 @@ public class ReportController {
     private ReportService reportService;
 
     // Tüm istatistiki Genel Verileri Getirir
-    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
+
     @GetMapping("/all")
     public ResponseEntity<ReportStatisticDTO> getAllStatistic(){
         ReportStatisticDTO statistics =  reportService.getAllStatistic();
