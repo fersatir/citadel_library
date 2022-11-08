@@ -29,10 +29,10 @@ public interface LoanRepository extends JpaRepository<Loan,Long> {
     @Query("SELECT u FROM Loan u WHERE u.user.id = ?1")
     List<Loan> getUserLoans(Long id);
 
-  @Query("SELECT new com.library.dto.response.LoanResponse(u) FROM Loan u WHERE u.user.id = ?1")
+  @Query("SELECT new com.library.dto.response.LoanResponse(u,u.user,u.book) FROM Loan u WHERE u.user.id = ?1")
   Page<LoanResponse> getAutUserLoan(Long id, Pageable pageable);
 
-  @Query("SELECT new com.library.dto.response.LoanResponse(u) FROM Loan u WHERE u.user.id = ?1 and u.id = ?2")
+  @Query("SELECT new com.library.dto.response.LoanResponse(u,u.user, u.book) FROM Loan u WHERE u.user.id = ?1 and u.id = ?2")
   LoanResponse getAutUserLoanId(Long idLogin, Long id);
 
   @Query("SELECT new com.library.dto.response.LoanResponseBook(u) FROM Loan u WHERE u.book.id = ?1")

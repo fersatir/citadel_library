@@ -132,7 +132,7 @@ public class LoanService {
     }
 
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<LoanResponse> getAuthenticatedUserLoans(Pageable pageable,Long idLogin) {
         User user= userRepository.findById(idLogin).orElseThrow(()->
                 new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, idLogin)));
