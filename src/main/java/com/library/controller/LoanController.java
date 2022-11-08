@@ -95,9 +95,9 @@ public class LoanController {
     //It will return details of a loan of any user
     @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
     @GetMapping("/auth/{id}")
-    public ResponseEntity<LoanResponseBookUser> getAuthenticatedUserLoanId(@PathVariable  Long id){
+    public ResponseEntity<LoanResponse> getAuthenticatedUserLoanId(@PathVariable  Long id){
 
-        LoanResponseBookUser loanAutUser = loanService.getloanBookAndUser(id);
+        LoanResponse loanAutUser = loanService.getloanBookAndUser(id);
 
         return ResponseEntity.ok(loanAutUser);
     }

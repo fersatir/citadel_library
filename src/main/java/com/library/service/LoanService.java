@@ -176,8 +176,8 @@ public class LoanService {
         return authUserLoans;
     }
 
-    public LoanResponseBookUser getloanBookAndUser(Long id) {
-        LoanResponseBookUser loan = loanRepository.getAnyUserLoanByEmployeAnyAdmin(id);
+    public LoanResponse getloanBookAndUser(Long id) {
+        LoanResponse loan = loanRepository.getAnyUserLoanByEmployeAnyAdmin(id);
 
         if(loan == null) throw new BadRequestException("Kayıt bulunamamıştır");
         return loan;
