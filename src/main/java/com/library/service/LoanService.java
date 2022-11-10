@@ -6,10 +6,7 @@ import com.library.domain.Loan;
 import com.library.domain.User;
 import com.library.dto.mapper.LoanMapper;
 import com.library.dto.requests.LoanUpdateRequest;
-import com.library.dto.response.LoanResponse;
-import com.library.dto.response.LoanResponseBook;
-import com.library.dto.response.LoanResponseBookUser;
-import com.library.dto.response.LoanUpdateResponse;
+import com.library.dto.response.*;
 import com.library.exception.BadRequestException;
 import com.library.exception.ResourceNotFoundException;
 import com.library.exception.message.ErrorMessage;
@@ -220,4 +217,14 @@ public class LoanService {
         return loanUpdateResponse;
     }
 
+    public Page<LoanAmountCategoryResponse> getMostLoanBookAmountOfCategory(Long id,Pageable pageable) {
+        User user= userRepository.findById(id).orElseThrow(()->
+                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, id)));
+
+        Page<LoanAmountCategoryResponse> loan = loanRepository.userLoansCountWithCategoryName(id,pageable);
+
+        if(loan == null) throw new BadRequestException("Kayıt bulunamamıştır");
+        return loan;
+
+    }
 }

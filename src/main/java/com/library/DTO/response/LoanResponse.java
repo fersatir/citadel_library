@@ -43,6 +43,8 @@ public class LoanResponse {
 
     private String publisher;
     private User user;
+
+    private Long bookAmount;
     public LoanResponse(Loan loan,User user, Book book){
         this.id = loan.getId();
         this.loanDate = loan.getLoanDate();
@@ -63,4 +65,5 @@ public class LoanResponse {
         this.user = user;
 
     }
+
 }

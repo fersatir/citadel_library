@@ -1,10 +1,7 @@
 package com.library.controller;
 
 import com.library.dto.LoanDTO;
-import com.library.dto.response.LoanResponse;
-import com.library.dto.response.LoanResponseBook;
-import com.library.dto.response.LoanResponseBookUser;
-import com.library.dto.response.LoanUpdateResponse;
+import com.library.dto.response.*;
 import com.library.service.LoanService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/loans")
@@ -111,6 +109,22 @@ public class LoanController {
         LoanUpdateResponse loanDelete = loanService.deleteLoan(id);
 
         return ResponseEntity.ok(loanDelete);
+    }
+
+
+    //It will return most loan book amount of category authenticated user
+    @PreAuthorize("hasRole('MEMBER')")
+    @GetMapping("/mostcategory")
+    public ResponseEntity<Page<LoanAmountCategoryResponse>> getMostLoanBookAmountOfCategory(HttpServletRequest request,
+                                                                                            @RequestParam(required = false, value = "page", defaultValue = "0") int page,
+                                                                                            @RequestParam(required = false,value = "size", defaultValue = "6") int size
+                                                                                            ){
+
+        Long idLogin = (Long) request.getAttribute("id");
+        Pageable pageable = PageRequest.of(page,size);
+        Page<LoanAmountCategoryResponse> loanAutUserCategory = loanService.getMostLoanBookAmountOfCategory(idLogin,pageable);
+
+        return ResponseEntity.ok(loanAutUserCategory);
     }
 
 }

@@ -12,6 +12,8 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Set;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -58,7 +60,7 @@ public class UserCreateDTO {
     @NotNull
     private Boolean isActive = true;
     private Boolean builtIn = false;
-    private Long roleId;
+    private String role;
 
 
 }

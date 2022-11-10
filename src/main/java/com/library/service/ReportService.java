@@ -61,9 +61,9 @@ public class ReportService {
         return bookDTOs;
     }
 
-    public Page<BookDTO> getUnreturnedBooksWithPage(Pageable pageable, LocalDateTime time) {
+    public Page<BookDTO> getUnreturnedBooksWithPage(Pageable pageable) {
 
-        Page<BookDTO> bookDTOs = loanRepository.unreturned(pageable,time);
+        Page<BookDTO> bookDTOs = loanRepository.unreturned(pageable);
 
         return bookDTOs;
     }

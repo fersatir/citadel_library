@@ -8,6 +8,7 @@ import com.library.dto.requests.AdminUpdateUserRequest;
 import com.library.dto.requests.UpdatePasswordRequest;
 import com.library.dto.requests.UserUpdateRequest;
 import com.library.dto.response.CLResponse;
+import com.library.dto.response.LoanResponse;
 import com.library.dto.response.UserLoansResponse;
 import com.library.service.UserService;
 import lombok.AllArgsConstructor;
@@ -89,17 +90,10 @@ public class UserController {
     //It will return the authenticated user object it should return the corresponding book object in response
     @GetMapping("/loans")
     @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF') or hasRole('MEMBER')")
-    public ResponseEntity<Page<UserLoansResponse>> getUserLoansPage(@RequestParam(required = false, value = "page",defaultValue = "0") int page,
-                                                                    @RequestParam(required = false, value = "size",defaultValue = "20") int size,
-                                                                    @RequestParam(required = false, value = "sort",defaultValue = "id") String prop,
-                                                                    @RequestParam(required = false, value = "direction",defaultValue = "DESC")Sort.Direction direction,
-                                                                    HttpServletRequest request){
+    public ResponseEntity<List<LoanResponse>> getUserLoansPage(HttpServletRequest request){
         Long id =(Long)request.getAttribute("id");
-        Pageable pageable = PageRequest.of(page,size,Sort.by(direction,prop));
-        Page<UserLoansResponse> userLoansPage = userService.getUserLoans(id,pageable);
+        List<LoanResponse> userLoansPage = userService.getUserLoans(id);
         return ResponseEntity.ok(userLoansPage);
-
-
     }
     // http://localhost:8080/users/delete/43
     @PutMapping("/delete/{id}")

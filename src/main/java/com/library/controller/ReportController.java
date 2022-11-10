@@ -64,7 +64,7 @@ public class ReportController {
                                                          @RequestParam(required = false,value = "size", defaultValue = "20") int size){
 
         Pageable pageable = PageRequest.of(page,size);
-        Page<BookDTO> unreturned = reportService.getUnreturnedBooksWithPage(pageable, LocalDateTime.now());
+        Page<BookDTO> unreturned = reportService.getUnreturnedBooksWithPage(pageable);
 
         return ResponseEntity.ok(unreturned);
     }
