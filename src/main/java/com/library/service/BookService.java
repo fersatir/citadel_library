@@ -37,6 +37,9 @@ public class BookService {
         bookDTO.setAuthor_id(book.getAuthor().getId());
         bookDTO.setCategory_id(book.getCategory().getId());
         bookDTO.setImage_id(book.getImage().getId());
+        bookDTO.setAuthorName(book.getAuthor().getName());
+        bookDTO.setPublisherName(book.getPublisher().getName());
+        bookDTO.setCategoryName(book.getCategory().getName());
 
         return bookDTO;
     }
