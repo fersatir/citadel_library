@@ -146,10 +146,9 @@ public class UserService {
         userRepository.save(user);
         return userMapper.userToUserDTO(user);
     }
-
+    @Transactional()
     public UserDTO updateUserByAdminOrStaff(Long id, Long idLogin, AdminUpdateUserRequest adminUpdateUserRequest) {
 
-        boolean emailExist = userRepository.existsByEmail(adminUpdateUserRequest.getEmail());
 
         User user = userRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, id)));
@@ -172,7 +171,7 @@ public class UserService {
         if (loginUserRole.equals(RoleType.ROLE_STAFF) && updateRoleName.equals(RoleType.ROLE_STAFF)) {
             throw new BadRequestException(ErrorMessage.STAFF_DOESNT_PROCESS_ABOUT_OTHER_STAFF);
         }
-        if (emailExist && !adminUpdateUserRequest.getEmail().equals(user.getEmail())) {
+        if (!adminUpdateUserRequest.getEmail().equals(user.getEmail())) {
             throw new ConflictException(String.format(ErrorMessage.EMAIL_ALREADY_EXIST_MESSAGE, user.getEmail()));
         }
         if (adminUpdateUserRequest.getPassword() == null) {
@@ -192,6 +191,7 @@ public class UserService {
         return userMapper.userToUserDTO(updateUser);
     }
 
+    @Transactional()
     public UserDTO updateUser(Long id, UserUpdateRequest request) {
         boolean existEmail = userRepository.existsByEmail(request.getEmail());
 

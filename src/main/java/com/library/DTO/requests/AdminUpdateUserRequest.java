@@ -28,8 +28,7 @@ public class AdminUpdateUserRequest {
     @Size(min=2, max=30,message="Your last name '${validatedValue}' must be between {min} and {max} chars long")
     private String lastName;
 
-    @NotNull(message="Please provide score")
-    //@Size(min=-2, max=2,message="Score '${validatedValue}' must be between {min} and {max} chars long")
+
     private Integer score = 0;
 
     @NotNull(message="Please provide address")
@@ -50,12 +49,7 @@ public class AdminUpdateUserRequest {
     private String email;
 
 
-    @NotNull(message="Please provide password")
     private String password;
-
-    @NotNull(message="Please provide createDate")
-    private LocalDateTime createDate = LocalDateTime.now();
-
     private String resetPasswordCode;
 
     @NotNull

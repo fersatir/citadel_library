@@ -1,5 +1,6 @@
 package com.library.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -42,6 +43,7 @@ public class UserCreateDTO {
     @Pattern(regexp = "^\\d{3}-\\d{3}-\\d{4}$", message = "Please provide valid phone number")
     private String phone;
 
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy",timezone = "Turkey")
     private Date birthDate;
 
     @Email(message = "Please provide valid email")
