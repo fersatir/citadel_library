@@ -23,35 +23,31 @@ public class AdminUpdateUserRequest {
     @NotNull(message="Please provide last name")
     @Size(min=2, max=30,message="Your last name '${validatedValue}' must be between {min} and {max} chars long")
     private String firstName;
-
     @NotNull(message="Please provide last name")
     @Size(min=2, max=30,message="Your last name '${validatedValue}' must be between {min} and {max} chars long")
     private String lastName;
 
-
-    private Integer score = 0;
-
-    @NotNull(message="Please provide address")
-    @Size(min=10, max=100,message="Address '${validatedValue}' must be between {min} and {max} chars long")
-    private String address;
-
+    @Size(min = 4, max = 20,message="Please Provide Correct Size for Password")
+    @NotNull(message = "Please provide your password")
+    private String password;
 
     @NotNull(message="Please provide phone number")
     @Size(min=12, max=12,message="Phone number '${validatedValue}' must be {max} chars long")
     @Pattern(regexp = "^\\d{3}-\\d{3}-\\d{4}$",message = "Please provide valid phone number")
     private String phone;
 
-    private Date birthDate;
-
     @Email(message = "Please provide valid email")
     @NotNull(message="Please provide email")
     @Size(min=10, max=80,message="Email '${validatedValue}' must be between {min} and {max} chars long")
     private String email;
+    private Integer score = 0;
+    @NotNull(message="Please provide address")
+    @Size(min=10, max=100,message="Address '${validatedValue}' must be between {min} and {max} chars long")
+    private String address;
+    private Date birthDate;
 
-
-    private String password;
+    private LocalDateTime createDate;
     private String resetPasswordCode;
-
     @NotNull
     private Boolean isActive=true;
 

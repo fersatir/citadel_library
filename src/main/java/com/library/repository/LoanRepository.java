@@ -38,8 +38,10 @@ public interface LoanRepository extends JpaRepository<Loan,Long> {
   @Query("SELECT new com.library.dto.response.LoanResponse(u,u.user, u.book) FROM Loan u WHERE u.id = ?1")
   LoanResponse getAnyUserLoanByEmployeAnyAdmin(Long id);
 
+
     @Query("SELECT new com.library.dto.response.LoanResponse(u,u.user, u.book) FROM Loan u WHERE (u.user.id = ?1 and u.returnDate is null)")
     List<LoanResponse> getAuthUserLoans(Long id);
+
 
     @Query("SELECT new com.library.dto.ReportMostPopularBookDTO(max(l.book.id), max(l.book.name), max(l.book.isbn), " +
             "max(l.book.pageCount), count(l.book.id),max(l.book.author.name),max(l.book.image.id)) from Loan l  group by l.book.id order by count(l.book.id) desc ")
