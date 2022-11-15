@@ -34,7 +34,7 @@ public class LoanController {
     }
 
     //It will return own loans of authenticated user
-    @PreAuthorize("hasRole('MEMBER')")
+    @PreAuthorize("hasRole('MEMBER') or hasRole('ADMIN') or hasRole('STAFF')")
     @GetMapping()
     public ResponseEntity<Page<LoanResponse>> getAuthenticatedUserLoansWithPage(HttpServletRequest request,
                                                           @RequestParam(required = false, value = "page", defaultValue = "0") int page,

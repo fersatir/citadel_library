@@ -117,7 +117,7 @@ public class UserController {
 
 
     @PatchMapping
-    @PreAuthorize("hasRole('MEMBER')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF') or hasRole('MEMBER')")
     public ResponseEntity<UserDTO> updateUser(HttpServletRequest request, @Valid @RequestBody UserUpdateRequest userUpdateRequest){
       Long id = (Long) request.getAttribute("id");
       UserDTO userDTO = userService.updateUser(id,userUpdateRequest);

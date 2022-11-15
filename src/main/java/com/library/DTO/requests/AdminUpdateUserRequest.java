@@ -1,5 +1,6 @@
 package com.library.dto.requests;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,7 +29,6 @@ public class AdminUpdateUserRequest {
     private String lastName;
 
     @Size(min = 4, max = 20,message="Please Provide Correct Size for Password")
-    @NotNull(message = "Please provide your password")
     private String password;
 
     @NotNull(message="Please provide phone number")
@@ -44,6 +44,8 @@ public class AdminUpdateUserRequest {
     @NotNull(message="Please provide address")
     @Size(min=10, max=100,message="Address '${validatedValue}' must be between {min} and {max} chars long")
     private String address;
+
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy",timezone = "Turkey")
     private Date birthDate;
 
     private LocalDateTime createDate;
