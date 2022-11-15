@@ -8,7 +8,6 @@ import com.library.dto.UserDTO;
 import com.library.dto.mapper.UserMapper;
 import com.library.dto.requests.*;
 import com.library.dto.response.LoanResponse;
-import com.library.dto.response.UserLoansResponse;
 import com.library.exception.BadRequestException;
 import com.library.exception.ConflictException;
 import com.library.dto.UserCreateDTO;
@@ -57,10 +56,10 @@ public class UserService {
         RoleType loginUser = loginUserRoles.stream().findFirst().get().getName();
 
         if (loginUser.equals(RoleType.ROLE_STAFF)) {
-            createUser.setRoles(setRoles(3L));
+            createUser.setRoles(convertRoles(userCreateDTO.getRoleName()));
         }
         if (loginUser.equals(RoleType.ROLE_ADMIN)) {
-            createUser.setRoles(convertRoles(userCreateDTO.getRole()));
+            createUser.setRoles(convertRoles(userCreateDTO.getRoleName()));
         }
 
         String encodedPassword = passwordEncoder.encode(userCreateDTO.getPassword());
@@ -146,34 +145,21 @@ public class UserService {
         userRepository.save(user);
         return userMapper.userToUserDTO(user);
     }
-    @Transactional()
-    public UserDTO updateUserByAdminOrStaff(Long id, Long idLogin, AdminUpdateUserRequest adminUpdateUserRequest) {
 
+    public UserDTO updateUserByAdminOrStaff(Long id, AdminUpdateUserRequest adminUpdateUserRequest) {
+        boolean emailExist = userRepository.existsByEmail(adminUpdateUserRequest.getEmail());
 
         User user = userRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, id)));
-
-        User userLogin = userRepository.findById(idLogin).orElseThrow(() ->
-                new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, idLogin)));
 
         if (user.getBuiltIn()) {
             throw new BadRequestException(ErrorMessage.CANT_PROCESS__WITH_BUILT_IN_TRUE_USER);
         }
 
-        Set<Role> userRoles = user.getRoles();
-        RoleType updateRoleName = userRoles.stream().findFirst().get().getName();
-        Set<Role> userloginRole = userLogin.getRoles();
-        RoleType loginUserRole = userloginRole.stream().findFirst().get().getName();
+        if (emailExist && !adminUpdateUserRequest.getEmail().equals(user.getEmail())) {
+            throw new ConflictException(String.format(ErrorMessage.EMAIL_ALREADY_EXIST_MESSAGE,user.getEmail()));
+        }
 
-        if (loginUserRole.equals(RoleType.ROLE_STAFF) && updateRoleName.equals(RoleType.ROLE_ADMIN)) {
-            throw new BadRequestException(ErrorMessage.STAFF_DOESNT_PROCESS_ABOUT_ADMIN);
-        }
-        if (loginUserRole.equals(RoleType.ROLE_STAFF) && updateRoleName.equals(RoleType.ROLE_STAFF)) {
-            throw new BadRequestException(ErrorMessage.STAFF_DOESNT_PROCESS_ABOUT_OTHER_STAFF);
-        }
-        if (!adminUpdateUserRequest.getEmail().equals(user.getEmail())) {
-            throw new ConflictException(String.format(ErrorMessage.EMAIL_ALREADY_EXIST_MESSAGE, user.getEmail()));
-        }
         if (adminUpdateUserRequest.getPassword() == null) {
             adminUpdateUserRequest.setPassword(user.getPassword());
         } else {
@@ -182,16 +168,23 @@ public class UserService {
         }
 
         User updateUser = userMapper.adminUpdateUserRequest(adminUpdateUserRequest);
-
-        updateUser.setId(user.getId());
-        updateUser.setRoles(convertRoles(adminUpdateUserRequest.getRoles()));
+         updateUser.setRoles(convertRoles(adminUpdateUserRequest.getRoles()));
+         updateUser.setId(user.getId());
 
         userRepository.save(updateUser);
 
         return userMapper.userToUserDTO(updateUser);
+
+
+
+      /*userRepository.update(id, adminUpdateUserRequest.getFirstName(), adminUpdateUserRequest.getLastName(), adminUpdateUserRequest.getPhone(), adminUpdateUserRequest.getEmail(),
+               adminUpdateUserRequest.getAddress(), adminUpdateUserRequest.getBirthDate(),adminUpdateUserRequest.getIsActive(),adminUpdateUserRequest.getBuiltIn(), adminUpdateUserRequest.getResetPasswordCode(),
+               adminUpdateUserRequest.getCreateDate(),adminUpdateUserRequest.getScore());*/
+
     }
 
-    @Transactional()
+
+    @Transactional
     public UserDTO updateUser(Long id, UserUpdateRequest request) {
         boolean existEmail = userRepository.existsByEmail(request.getEmail());
 

@@ -62,7 +62,7 @@ public class UserCreateDTO {
     @NotNull
     private Boolean isActive = true;
     private Boolean builtIn = false;
-    private String role;
+    private String roleName;
 
 
 }

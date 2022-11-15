@@ -88,6 +88,7 @@ public class UserController {
 
     // http://localhost:8080/users/loans  -
     //It will return the authenticated user object it should return the corresponding book object in response
+    // Yenilendi.
     @GetMapping("/loans")
     @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF') or hasRole('MEMBER')")
     public ResponseEntity<List<LoanResponse>> getUserLoansPage(HttpServletRequest request){
@@ -106,13 +107,12 @@ public class UserController {
 
     // http://localhost:8080/users/2 -
     //It will return the updated user object admin can update any type of user,while an employee can update only member-type users.
-    @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('STAFF')")
-    public ResponseEntity<UserDTO>  updateUserByAdminOrStaff(HttpServletRequest request,@PathVariable Long id, @Valid @RequestBody AdminUpdateUserRequest adminUpdateUserRequest){
-      Long idLogin = (Long) request.getAttribute("id");
-       UserDTO userDTO =  userService.updateUserByAdminOrStaff(id,idLogin,adminUpdateUserRequest);
+    @PutMapping("/{id}/auth")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserDTO>  updateUserByAdminOrStaff(@PathVariable Long id, @Valid @RequestBody AdminUpdateUserRequest adminUpdateUserRequest){
+     UserDTO userDTO = userService.updateUserByAdminOrStaff(id,adminUpdateUserRequest);
 
-       return ResponseEntity.ok(userDTO);
+     return ResponseEntity.ok(userDTO);
     }
 
 
